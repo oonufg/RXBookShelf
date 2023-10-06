@@ -21,9 +21,18 @@ public class Shelf {
         return title;
     }
     public Book getBook(long bookId){
-        return null;
+        return bookRepository.getBook(bookId);
     }
     public List<Book> getBooks(){
-        return null;
+        return bookRepository.getBooks(this);
     }
+
+    public void addBook(Book bookToAdd){
+        bookRepository.addBook(bookToAdd);
+    }
+
+    public void deleteBook(Book book){
+        bookRepository.deleteBook(book);
+    }
+
 }
