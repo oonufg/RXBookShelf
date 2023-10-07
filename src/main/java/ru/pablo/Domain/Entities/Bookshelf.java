@@ -1,6 +1,6 @@
-package Domain.Entities;
+package ru.pablo.Domain.Entities;
 
-import Domain.Persistance.IShelfRepository;
+import ru.pablo.Domain.Persistance.IShelfRepository;
 
 import java.util.List;
 

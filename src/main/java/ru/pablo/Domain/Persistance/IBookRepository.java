@@ -1,7 +1,8 @@
-package Domain.Persistance;
+package ru.pablo.Domain.Persistance;
 
-import Domain.Entities.Book;
-import Domain.Entities.Shelf;
+import ru.pablo.Domain.Entities.Book;
+import ru.pablo.Domain.Entities.Shelf;
+
 import java.util.List;
 
 public interface IBookRepository {
