@@ -1,4 +1,4 @@
-package ru.pablo.PersistanceImpl;
+package ru.pablo.PersistanceImpl.Mappers;
 
 import ru.pablo.Domain.Entities.User;
 
