@@ -17,8 +17,8 @@ public class BookshelfMapper {
         return bookshelf;
     }
 
-    public static List<Bookshelf> mapListBookshelf(List<Map<String, Object>> unmappedBookshelves){
-        List<Bookshelf> result = new LinkedList<>();
+    public static List<UserBookshelf> mapListUserBookshelf(List<Map<String, Object>> unmappedBookshelves){
+        List<UserBookshelf> result = new LinkedList<>();
         for(Map<String, Object> unmappedBookshelf: unmappedBookshelves){
             result.add(mapBookshelf(unmappedBookshelf));
         }

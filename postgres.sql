@@ -22,7 +22,7 @@ CREATE TABLE users_bookshelves(
 CREATE TABLE IF NOT EXISTS shelves(
     id BIGSERIAL PRIMARY KEY,
     title VARCHAR(20) NOT NULL,
-    bookshelf_id BIGINT REFERENCES bookshelves(id)
+    bookshelf_id BIGINT REFERENCES bookshelves(id),
     UNIQUE(id, title)
 );
 

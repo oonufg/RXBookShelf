@@ -4,6 +4,7 @@ import ru.pablo.PersistanceImpl.Repositories.Tables.Database.BookshelfServiceTab
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,19 @@ public class UsersBookshelvesTable extends BookshelfServiceTable {
         }
         return result;
     }
+
+    public Map<String,Object> getUserBookshelf(long userId, long bookshelfId){
+        Map<String,Object> result = new HashMap<>();
+        try{
+            PreparedStatement query = getUserBookshelfStatement(userId, bookshelfId);
+            ResultSet queryResult = executeQuery(query);
+            result.putAll(resultSetToMap(queryResult));
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
+
 
     public void subscribeToBookshelf(long userId, long bookshelfID, boolean isOwner){
         try{
@@ -40,9 +54,20 @@ public class UsersBookshelvesTable extends BookshelfServiceTable {
 
     }
 
+    private PreparedStatement getUserBookshelfStatement(long userId, long bookShelfId) throws SQLException{
+        String query =
+                "SELECT bookshelves.id, bookshelves.title, users_bookshelves.isowner FROM users_bookshelves " +
+                "LEFT JOIN bookshelves ON users_bookshelves.bookshelf_id = bookshelves.id " +
+                "WHERE users_bookshelves.user_id = ? AND users_bookshelves.bookshelf_id = ?";
+        PreparedStatement statement = getStatement(query);
+        statement.setLong(1, userId);
+        statement.setLong(2, bookShelfId);
+        return statement;
+    }
+
     private PreparedStatement getUserBookShevlesStatement(long userId) throws SQLException {
         String query =
-                "SELECT bookshelves.id, bookshelves.title FROM users_bookshelves " +
+                "SELECT bookshelves.id, bookshelves.title, users_bookshelves.isowner FROM users_bookshelves " +
                 "LEFT JOIN bookshelves ON users_bookshelves.bookshelf_id = bookshelves.id " +
                 "WHERE users_bookshelves.user_id = ?";
 

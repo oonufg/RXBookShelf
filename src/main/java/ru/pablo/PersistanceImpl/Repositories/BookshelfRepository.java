@@ -19,13 +19,13 @@ public class BookshelfRepository implements IBookshelfRepository {
     }
 
     @Override
-    public Bookshelf getBookshelf(long bookshelfID) {
-        return null;
+    public UserBookshelf getBookshelf(long userId, long bookshelfID) {
+        return BookshelfMapper.mapBookshelf(usersBookshelvesTable.getUserBookshelf(userId, bookshelfID));
     }
 
     @Override
-    public List<Bookshelf> getBookshelves(long userId) {
-        return BookshelfMapper.mapListBookshelf(usersBookshelvesTable.getUserBookshelves(userId));
+    public List<UserBookshelf> getBookshelves(long userId) {
+        return BookshelfMapper.mapListUserBookshelf(usersBookshelvesTable.getUserBookshelves(userId));
     }
 
     @Override

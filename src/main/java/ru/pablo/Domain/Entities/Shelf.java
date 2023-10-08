@@ -1,6 +1,7 @@
 package ru.pablo.Domain.Entities;
 
 import ru.pablo.Domain.Persistance.IBookRepository;
+import ru.pablo.PersistanceImpl.Repositories.BookRepository;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ public class Shelf {
     public Shelf(long id, String title){
         this.id = id;
         this.title = title;
+        this.bookRepository = new BookRepository();
     }
     public Shelf(String title){
         this.title = title;

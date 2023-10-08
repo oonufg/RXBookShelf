@@ -6,9 +6,7 @@ import ru.pablo.PersistanceImpl.Repositories.ShelfRepository;
 import java.util.List;
 
 public class UserBookshelf extends Bookshelf{
-    private long id;
     private boolean isOwner;
-
     private IShelfRepository shelfRepository;
 
     public UserBookshelf(long id, String title, boolean isOwner){
