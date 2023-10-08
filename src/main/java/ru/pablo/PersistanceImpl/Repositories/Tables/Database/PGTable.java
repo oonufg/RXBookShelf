@@ -1,9 +1,9 @@
-package ru.pablo.PersistanceImpl.Tables.Database;
+package ru.pablo.PersistanceImpl.Repositories.Tables.Database;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class PGDatabase extends AbstractDatabase {
+public class PGTable extends AbstractTable {
     @Override
     protected final void initConnection(String url, String username, String password) {
         try{

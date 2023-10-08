@@ -1,6 +1,6 @@
-package ru.pablo.PersistanceImpl.Tables;
+package ru.pablo.PersistanceImpl.Repositories.Tables;
 
-import ru.pablo.PersistanceImpl.Tables.Database.BookshelfDatabase;
+import ru.pablo.PersistanceImpl.Repositories.Tables.Database.BookshelfServiceTable;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class UserTable extends BookshelfDatabase {
+public class UserTable extends BookshelfServiceTable {
     public List<Map<String, Object>> getUsers(){
         List<Map<String, Object>> result = new ArrayList<>();
         try {
@@ -64,8 +64,8 @@ public class UserTable extends BookshelfDatabase {
     private PreparedStatement getUserStatement(long userId) throws SQLException{
         String query =
                 "SELECT * FROM users " +
-                "WHERE id = ?"
-                ;
+                "WHERE id = ?";
+
         PreparedStatement statement = getStatement(query);
         statement.setLong(1, userId);
         return statement;

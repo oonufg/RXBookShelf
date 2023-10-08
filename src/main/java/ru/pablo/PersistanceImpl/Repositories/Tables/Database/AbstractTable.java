@@ -1,4 +1,4 @@
-package ru.pablo.PersistanceImpl.Tables.Database;
+package ru.pablo.PersistanceImpl.Repositories.Tables.Database;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractDatabase {
+public abstract class AbstractTable {
     protected static Connection connection;
 
 
@@ -16,6 +16,7 @@ public abstract class AbstractDatabase {
 
     protected int executeUpdate(PreparedStatement statement) throws SQLException{
         int result = statement.executeUpdate();
+        System.out.println(result);
         return result;
     }
 
@@ -42,8 +43,9 @@ public abstract class AbstractDatabase {
     protected Map<String, Object> resultSetToMap(ResultSet resultSet){
         Map<String, Object> result = new HashMap<>();
         try{
-            resultSet.next();
-            result.putAll(resultSetToMapMapper(resultSet));
+            if(resultSet.next()) {
+                result.putAll(resultSetToMapMapper(resultSet));
+            }
         }catch (SQLException e){
             System.out.println(e.getMessage());
         }

@@ -1,11 +1,11 @@
-package ru.pablo.PersistanceImpl.Tables.Database;
+package ru.pablo.PersistanceImpl.Repositories.Tables.Database;
 
-public class BookshelfDatabase extends PGDatabase{
+public class BookshelfServiceTable extends PGTable {
     private String url = "jdbc:postgresql://localhost:5432/bookshelf_service";
     private String username = "postgres";
     private String password = "177013";
 
-    public BookshelfDatabase(){
+    public BookshelfServiceTable(){
         initConnection(url, username, password);
     }
 }

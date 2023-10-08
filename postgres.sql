@@ -7,22 +7,24 @@ CREATE TABLE IF NOT EXISTS users(
     nickname VARCHAR(20) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS bookshelf(
+CREATE TABLE IF NOT EXISTS bookshelves(
     id BIGSERIAL PRIMARY KEY,
     title VARCHAR(20) NOT NULL
 );
 
 CREATE TABLE users_bookshelves(
     user_id BIGINT REFERENCES users(id),
-    bookshelf_id BIGINT REFERENCES users(id)
+    bookshelf_id BIGINT REFERENCES bookshelves(id),
     isOwner BOOL NOT NULL,
-)
+    UNIQUE(user_id, bookshelf_id)
+);
 
 CREATE TABLE IF NOT EXISTS shelves(
     id BIGSERIAL PRIMARY KEY,
     title VARCHAR(20) NOT NULL,
-    bookshelf_id BIGINT REFERENCES bookshelf(id)
-)
+    bookshelf_id BIGINT REFERENCES bookshelves(id)
+    UNIQUE(id, title)
+);
 
 CREATE TABLE IF NOT EXISTS books(
     id BIGSERIAL PRIMARY KEY,

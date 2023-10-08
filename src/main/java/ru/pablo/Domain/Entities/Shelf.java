@@ -13,6 +13,9 @@ public class Shelf {
         this.id = id;
         this.title = title;
     }
+    public Shelf(String title){
+        this.title = title;
+    }
 
     public long getId() {
         return id;
