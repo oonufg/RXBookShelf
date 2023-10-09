@@ -3,10 +3,18 @@ package ru.pablo.PersistanceImpl.Repositories;
 import ru.pablo.Domain.Entities.Book;
 import ru.pablo.Domain.Entities.Shelf;
 import ru.pablo.Domain.Persistance.IBookRepository;
+import ru.pablo.PersistanceImpl.Mappers.BookMapper;
+import ru.pablo.PersistanceImpl.Repositories.Tables.BookTable;
 
 import java.util.List;
 
 public class BookRepository implements IBookRepository {
+    private static BookTable bookTable;
+    static{
+        bookTable = new BookTable();
+    }
+
+
 
     @Override
     public Book getBook(long bookId) {
@@ -14,8 +22,8 @@ public class BookRepository implements IBookRepository {
     }
 
     @Override
-    public List<Book> getBooks(Shelf shelf) {
-        return null;
+    public List<Book> getBooks(long shelfId) {
+        return BookMapper.mapBookList(bookTable.getBooks(shelfId));
     }
 
     @Override

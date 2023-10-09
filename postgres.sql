@@ -2,6 +2,14 @@ CREATE DATABASE bookshelf_service;
 
 \c bookshelf_service;
 
+
+CREATE TABLE mediafiles(
+    id BIGSERIAL PRIMARY KEY,
+	uid VARCHAR(50) NOT NULL,
+	title VARCHAR(50) NOT NULL,
+	extension VARCHAR(20) NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS users(
     id BIGSERIAL PRIMARY KEY,
     nickname VARCHAR(20) NOT NULL
@@ -29,13 +37,7 @@ CREATE TABLE IF NOT EXISTS shelves(
 CREATE TABLE IF NOT EXISTS books(
     id BIGSERIAL PRIMARY KEY,
     title VARCHAR(50) NOT NULL,
-    description VARCHAR(100) NOT NULL
+    description VARCHAR(100) NOT NULL,
+	shelf_id BIGINT REFERENCES shelves(id),
+    payload_id BIGINT REFERENCES mediafiles(id)
 );
-
-CREATE TABLE mediafiles(
-	uid VARCHAR(50) NOT NULL,
-	title VARCHAR(50) NOT NULL,
-	extension VARCHAR(20) NOT NULL,
-	book_id BIGINT REFERENCES books(id),
-	CONSTRAINT books_mediafiles UNIQUE(uid, book_id)
-)

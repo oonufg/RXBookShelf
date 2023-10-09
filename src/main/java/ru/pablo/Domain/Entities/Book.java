@@ -1,16 +1,21 @@
 package ru.pablo.Domain.Entities;
 
+import ru.pablo.Domain.MediaService.Entities.MediaFile;
+import ru.pablo.Domain.MediaService.Persistence.Repositories.MediaFileRepository;
+
 public class Book {
     private long id;
     private String title;
     private String description;
-    private byte[] payload;
+    private String payloadId;
+    private MediaFileRepository mediaFileRepository;
 
-    public Book(long id, String title, String description, byte[] payload){
+    public Book(long id, String title, String description, String payloadId){
         this.id = id;
         this.title = title;
         this.description = description;
-        this.payload = payload;
+        this.payloadId = payloadId;
+        this.mediaFileRepository = new MediaFileRepository();
     }
 
     public long getId() {
@@ -25,7 +30,7 @@ public class Book {
         return description;
     }
 
-    public byte[] getPayload(){
-        return payload;
+    public MediaFile getPayload(){
+        return mediaFileRepository.getMediaFile(payloadId);
     }
 }

@@ -32,7 +32,7 @@ public class UserBookshelf extends Bookshelf{
         return shelfRepository.getShelves(id);
     }
 
-    private boolean IsOwner(){
+    public boolean isOwner(){
         return isOwner;
     }
 

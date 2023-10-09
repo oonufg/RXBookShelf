@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IBookRepository {
     Book getBook(long bookId);
-    List<Book> getBooks(Shelf shelf);
+    List<Book> getBooks(long shelfId);
     void addBook(Book book);
     void deleteBook(Book book);
 }

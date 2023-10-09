@@ -32,7 +32,7 @@ public class Shelf {
     }
 
     public List<Book> getBooks(){
-        return bookRepository.getBooks(this);
+        return bookRepository.getBooks(id);
     }
 
     public void addBook(Book bookToAdd){
