@@ -12,7 +12,7 @@ public class BookMapper {
                 (Long)unmappedBook.get("id"),
                 (String)unmappedBook.get("title"),
                 (String) unmappedBook.get("description"),
-                (String) unmappedBook.get("payload_id")
+                (Long) unmappedBook.get("payload_id")
         );
     }
 

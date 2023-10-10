@@ -16,7 +16,17 @@ public class FilesTable extends BookshelfServiceTable {
         try{
             PreparedStatement query = getFileByUID(uid);
             ResultSet queryResult = executeQuery(query);
-            queryResult.next();
+            result.putAll(resultSetToMap(queryResult));
+        }catch(SQLException e){
+            System.out.println("->" + e.getMessage());
+        }
+        return result;
+    }
+    public Map<String,Object> getFileInfoByID(long id){
+        Map<String, Object> result = new HashMap<>();
+        try{
+            PreparedStatement query = getFileByID(id);
+            ResultSet queryResult = executeQuery(query);
             result.putAll(resultSetToMap(queryResult));
         }catch(SQLException e){
             System.out.println("->" + e.getMessage());
@@ -24,21 +34,34 @@ public class FilesTable extends BookshelfServiceTable {
         return result;
     }
 
-    public void saveFileInfo(String uit, String title, String extension){
+    public long saveFileInfo(String uit, String title, String extension){
+        long result = -1;
         try{
             PreparedStatement query = getSaveFileInfoStatement(uit, title, extension);
-            executeQuery(query);
+            ResultSet queryResult = executeQuery(query);
+            Map<String, Object> unmappedResult = resultSetToMap(queryResult);
+            result = (Long)unmappedResult.get("id");
         }catch(SQLException e){
             System.out.println("->" +e.getMessage());
         }
+        return result;
     }
 
     private PreparedStatement getSaveFileInfoStatement(String uid, String title, String extension) throws SQLException {
-        String query = "INSERT INTO mediafiles VALUES(?, ?, ?)";
+        String query =
+                "INSERT INTO mediafiles(uid, title, extension) VALUES(?, ?, ?) " +
+                "RETURNING id";
         PreparedStatement statement = getStatement(query);
         statement.setString(1, uid);
         statement.setString(2, title);
         statement.setString(3, extension);
+        return statement;
+    }
+
+    private PreparedStatement getFileByID(long id) throws SQLException{
+        String query = "SELECT * FROM mediafiles WHERE id = ?";
+        PreparedStatement statement = getStatement(query);
+        statement.setLong(1,id);
         return statement;
     }
 

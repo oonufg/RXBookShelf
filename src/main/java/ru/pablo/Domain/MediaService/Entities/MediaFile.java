@@ -3,17 +3,18 @@ package ru.pablo.Domain.MediaService.Entities;
 import java.util.UUID;
 
 public class MediaFile {
+    private long id;
     private UUID uid;
     private byte[] payload;
     private String extension;
     private String title;
 
-    public MediaFile(String UID, String title, String extension, byte[] payload){
+    public MediaFile(long id, String UID, String title, String extension, byte[] payload){
+        this.id = id;
         this.uid = UUID.fromString(UID);
         this.title = title;
         this.extension = extension;
         this.payload = payload;
-
     }
 
     public MediaFile(String title, String extension, byte[] payload){
@@ -52,6 +53,10 @@ public class MediaFile {
 
     public String getUID(){
         return uid.toString();
+    }
+
+    public void setPayload(byte[] payload){
+        this.payload = payload;
     }
 
 }

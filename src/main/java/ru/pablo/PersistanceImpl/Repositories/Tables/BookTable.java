@@ -23,14 +23,30 @@ public class BookTable extends BookshelfServiceTable {
         return result;
     }
 
-    public void addBook(){
+    public void addBook(String title, String description, long shelf_id, long payload_id){
+        try{
+            PreparedStatement query = getAddBookStatement(title, description, shelf_id, payload_id);
+            executeUpdate(query);
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
 
+    private PreparedStatement getAddBookStatement(String title, String description, long shelf_id, long payload_id) throws SQLException{
+        String query =
+                "INSERT INTO books(title, description, shelf_id, payload_id) " +
+                "VALUES(?,?,?,?)";
+        PreparedStatement statement = getStatement(query);
+        statement.setString(1, title);
+        statement.setString(2, description);
+        statement.setLong(3, shelf_id);
+        statement.setLong(4, payload_id);
+        return statement;
     }
 
     private PreparedStatement getBooksStatement(long shelfId) throws SQLException{
         String query =
-                "SELECT books.id, books.title, books.description, mediafiles.uid FROM  books\n" +
-                "JOIN mediafiles ON books.payload_id = mediafiles.id\n" +
+                "SELECT books.id, books.title, books.description, books.shelf_id, books.payload_id FROM  books " +
                 "WHERE books.shelf_id = ?";
         PreparedStatement statement = getStatement(query);
         statement.setLong(1, shelfId);

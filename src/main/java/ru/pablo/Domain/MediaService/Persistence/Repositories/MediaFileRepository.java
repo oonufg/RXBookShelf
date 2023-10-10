@@ -2,6 +2,7 @@ package ru.pablo.Domain.MediaService.Persistence.Repositories;
 
 
 import ru.pablo.Domain.MediaService.Entities.MediaFile;
+import ru.pablo.Domain.MediaService.Persistence.MediaFileMapper;
 import ru.pablo.Domain.MediaService.Persistence.Tables.FilesTable;
 import ru.pablo.Domain.MediaService.Entities.MediaStorage;
 
@@ -17,19 +18,23 @@ public class MediaFileRepository {
         mediaStorage = new MediaStorage();
     }
 
-    public void addMediaFile(MediaFile file){
-        filesTable.saveFileInfo(file.getUID(), file.getTitle(), file.getExtension());
+    public long addMediaFile(MediaFile file){
+        long result = filesTable.saveFileInfo(file.getUID(), file.getTitle(), file.getExtension());
         mediaStorage.saveFile(file.getUID(), file.getPayload());
+        return result;
     }
 
     public MediaFile getMediaFile(String uid){
         Map<String, Object> fileInfo = filesTable.getFileInfoByUID(uid);
-        MediaFile resultFile = new MediaFile(
-                (String)fileInfo.get("uid"),
-                (String)fileInfo.get("title"),
-                (String)fileInfo.get("extension"),
-                mediaStorage.getFilePay((String)fileInfo.get("uid"))
-        );
+        MediaFile resultFile = MediaFileMapper.mapMediafile(fileInfo);
+        resultFile.setPayload(mediaStorage.getFilePay(resultFile.getUID()));
+        return resultFile;
+    }
+
+    public MediaFile getMediaFile(long id){
+        Map<String, Object> fileInfo = filesTable.getFileInfoByID(id);
+        MediaFile resultFile = MediaFileMapper.mapMediafile(fileInfo);
+        resultFile.setPayload(mediaStorage.getFilePay(resultFile.getUID()));
         return resultFile;
     }
 

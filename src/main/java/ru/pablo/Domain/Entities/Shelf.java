@@ -36,10 +36,10 @@ public class Shelf {
     }
 
     public void addBook(Book bookToAdd){
-        bookRepository.addBook(bookToAdd);
+        bookRepository.addBook(id, bookToAdd);
     }
 
     public void deleteBook(Book book){
-        bookRepository.deleteBook(book);
+        bookRepository.deleteBook(id, book);
     }
 }

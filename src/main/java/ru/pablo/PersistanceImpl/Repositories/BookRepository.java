@@ -14,8 +14,6 @@ public class BookRepository implements IBookRepository {
         bookTable = new BookTable();
     }
 
-
-
     @Override
     public Book getBook(long bookId) {
         return null;
@@ -27,12 +25,13 @@ public class BookRepository implements IBookRepository {
     }
 
     @Override
-    public void addBook(Book book) {
+    public void addBook(long shelfId, Book book) {
 
+        bookTable.addBook(book.getTitle(), book.getDescription(), shelfId, book.getPayloadId());
     }
 
     @Override
-    public void deleteBook(Book book) {
+    public void deleteBook(long shelfId, Book book) {
 
     }
 }
