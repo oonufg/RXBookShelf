@@ -27,4 +27,11 @@ public class ShelfRepository implements IShelfRepository {
     public void appendShelf(long bookshelfId, Shelf shelfToAdd) {
         shelfTable.addShelf(bookshelfId, shelfToAdd.getTitle());
     }
+
+    @Override
+    public void deleteShelf(long shelfId) {
+        shelfTable.deleteShelf(shelfId);
+    }
+
+
 }

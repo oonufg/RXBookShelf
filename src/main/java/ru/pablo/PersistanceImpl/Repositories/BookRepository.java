@@ -10,6 +10,7 @@ import java.util.List;
 
 public class BookRepository implements IBookRepository {
     private static BookTable bookTable;
+
     static{
         bookTable = new BookTable();
     }
@@ -26,7 +27,6 @@ public class BookRepository implements IBookRepository {
 
     @Override
     public void addBook(long shelfId, Book book) {
-
         bookTable.addBook(book.getTitle(), book.getDescription(), shelfId, book.getPayloadId());
     }
 

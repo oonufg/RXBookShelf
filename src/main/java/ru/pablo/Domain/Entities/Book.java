@@ -23,7 +23,6 @@ public class Book {
         this.description = description;
         this.mediaFileRepository = new MediaFileRepository();
         this.payloadId = this.mediaFileRepository.addMediaFile(mediaFile);
-
     }
 
     public long getId() {
@@ -41,8 +40,8 @@ public class Book {
     public MediaFile getPayload(){
         return mediaFileRepository.getMediaFile(payloadId);
     }
+
     public long getPayloadId(){
-        System.out.println(payloadId);
         return payloadId;
     }
 }

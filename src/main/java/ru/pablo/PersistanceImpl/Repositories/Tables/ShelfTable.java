@@ -44,6 +44,25 @@ public class ShelfTable extends BookshelfServiceTable {
         return result;
     }
 
+    public void deleteShelf(long shelfId){
+        try{
+            PreparedStatement query = getDeleteShelfPrepareStatement(shelfId);
+            executeUpdate(query);
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    private PreparedStatement getDeleteShelfPrepareStatement(long shelfId) throws SQLException{
+        String query =
+                "DELETE FROM shelves " +
+                "WHERE id = ?";
+        PreparedStatement statement = getStatement(query);
+        statement.setLong(1, shelfId);
+        return  statement;
+    }
+
     private PreparedStatement getShelfStatement(long shelfId) throws SQLException{
         String query =
                 "SELECT * FROM shelves " +

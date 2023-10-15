@@ -17,20 +17,21 @@ CREATE TABLE IF NOT EXISTS users(
 
 CREATE TABLE IF NOT EXISTS bookshelves(
     id BIGSERIAL PRIMARY KEY,
-    title VARCHAR(20) NOT NULL
+    title VARCHAR(20) NOT NULL,
+    owner_id BIGINT REFERENCES users(id),
+    UNIQUE(title, owner_id)
 );
 
-CREATE TABLE users_bookshelves(
+CREATE TABLE users_subsbookshelves(
     user_id BIGINT REFERENCES users(id),
     bookshelf_id BIGINT REFERENCES bookshelves(id),
-    isOwner BOOL NOT NULL,
     UNIQUE(user_id, bookshelf_id)
 );
 
 CREATE TABLE IF NOT EXISTS shelves(
     id BIGSERIAL PRIMARY KEY,
     title VARCHAR(20) NOT NULL,
-    bookshelf_id BIGINT REFERENCES bookshelves(id),
+    bookshelf_id BIGINT REFERENCES bookshelves(id) ON DELETE CASCADE,
     UNIQUE(id, title)
 );
 

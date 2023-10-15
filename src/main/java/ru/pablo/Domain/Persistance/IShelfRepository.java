@@ -9,4 +9,6 @@ public interface IShelfRepository {
     Shelf getShelf(long shelfId);
     void appendShelf(long bookshelfId, Shelf shelfToAdd);
 
+    void deleteShelf(long shelfId);
+
 }

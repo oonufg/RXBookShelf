@@ -1,24 +1,22 @@
 package ru.pablo.PersistanceImpl.Mappers;
 
 import ru.pablo.Domain.Entities.Bookshelf;
-import ru.pablo.Domain.Entities.UserBookshelf;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public class BookshelfMapper {
-    public static UserBookshelf mapBookshelf(Map<String, Object> unmappedBookshelf){
-        UserBookshelf bookshelf = new UserBookshelf(
+    public static Bookshelf mapBookshelf(Map<String, Object> unmappedBookshelf){
+        Bookshelf bookshelf = new Bookshelf(
                 (Long)unmappedBookshelf.get("id"),
-                (String)unmappedBookshelf.get("title"),
-                (Boolean)unmappedBookshelf.get("isowner")
+                (String)unmappedBookshelf.get("title")
         );
         return bookshelf;
     }
 
-    public static List<UserBookshelf> mapListUserBookshelf(List<Map<String, Object>> unmappedBookshelves){
-        List<UserBookshelf> result = new LinkedList<>();
+    public static List<Bookshelf> mapListUserBookshelf(List<Map<String, Object>> unmappedBookshelves){
+        List<Bookshelf> result = new LinkedList<>();
         for(Map<String, Object> unmappedBookshelf: unmappedBookshelves){
             result.add(mapBookshelf(unmappedBookshelf));
         }
