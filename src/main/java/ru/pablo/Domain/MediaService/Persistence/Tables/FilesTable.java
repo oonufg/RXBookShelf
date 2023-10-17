@@ -1,7 +1,7 @@
 package ru.pablo.Domain.MediaService.Persistence.Tables;
 
 
-import ru.pablo.PersistanceImpl.Repositories.Tables.Database.BookshelfServiceTable;
+import ru.pablo.PersistanceImpl.Tables.Database.BookshelfServiceTable;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -1,6 +1,6 @@
-package ru.pablo.PersistanceImpl.Repositories.Tables;
+package ru.pablo.PersistanceImpl.Tables;
 
-import ru.pablo.PersistanceImpl.Repositories.Tables.Database.BookshelfServiceTable;
+import ru.pablo.PersistanceImpl.Tables.Database.BookshelfServiceTable;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -54,6 +54,15 @@ public class ShelfTable extends BookshelfServiceTable {
 
     }
 
+    public void changeShelf(long shelfId, String title){
+        try{
+            PreparedStatement query = getChangeShelfStatement(shelfId, title);
+            executeUpdate(query);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
     private PreparedStatement getDeleteShelfPrepareStatement(long shelfId) throws SQLException{
         String query =
                 "DELETE FROM shelves " +
@@ -87,6 +96,17 @@ public class ShelfTable extends BookshelfServiceTable {
         statement.setString(1, title);
         statement.setLong(2,bookshelfID);
         return statement;
+    }
+
+    private PreparedStatement getChangeShelfStatement(long shelfId, String title) throws SQLException{
+        String query =
+                "UPDATE shelves " +
+                "SET title = ? " +
+                "WHERE id = ?";
+        PreparedStatement statement = getStatement(query);
+        statement.setString(1, title);
+        statement.setLong(2, shelfId);
+        return  statement;
     }
 
 }

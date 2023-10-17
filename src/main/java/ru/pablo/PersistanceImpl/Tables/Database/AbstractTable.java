@@ -1,4 +1,4 @@
-package ru.pablo.PersistanceImpl.Repositories.Tables.Database;
+package ru.pablo.PersistanceImpl.Tables.Database;
 
 import java.sql.*;
 import java.util.HashMap;

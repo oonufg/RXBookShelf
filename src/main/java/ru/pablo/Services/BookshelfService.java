@@ -41,7 +41,7 @@ public class BookshelfService {
         Bookshelf bookshelf = bookshelfRepository.getBookshelf(bookshelfId);
         List<ShelfDTO> shelfDTOS = new LinkedList<>();
         for(Shelf shelf: bookshelf.getShelves()){
-            shelfDTOS.add(new ShelfDTO(shelf.getId(), shelf.getTitle()));
+            shelfDTOS.add(new ShelfDTO(shelf.getId(), shelf.getTitle(), null));
         }
         return new BookshelfDTO(bookshelf.getId(),bookshelf.getTitle(),shelfDTOS);
 
@@ -55,7 +55,5 @@ public class BookshelfService {
     public void deleteShelfFromBookshelf(long userId, BookshelfDTO bookshelfDTO, ShelfDTO shelfDTO){
         Bookshelf bookshelf = bookshelfRepository.getBookshelf(bookshelfDTO.id());
         bookshelf.deleteShelf(shelfDTO.id());
-
     }
-
 }

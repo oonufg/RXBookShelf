@@ -1,4 +1,4 @@
-package ru.pablo.PersistanceImpl.Repositories.Tables.Database;
+package ru.pablo.PersistanceImpl.Tables.Database;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;

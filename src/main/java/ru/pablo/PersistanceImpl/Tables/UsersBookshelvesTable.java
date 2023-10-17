@@ -1,13 +1,8 @@
-package ru.pablo.PersistanceImpl.Repositories.Tables;
+package ru.pablo.PersistanceImpl.Tables;
 
-import ru.pablo.PersistanceImpl.Repositories.Tables.Database.BookshelfServiceTable;
+import ru.pablo.PersistanceImpl.Tables.Database.BookshelfServiceTable;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 public class UsersBookshelvesTable extends BookshelfServiceTable {
     public void subscribeToBookshelf(long userId, long bookshelfID, boolean isOwner){

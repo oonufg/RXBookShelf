@@ -3,8 +3,8 @@ package ru.pablo.PersistanceImpl.Repositories;
 import ru.pablo.Domain.Entities.Bookshelf;
 import ru.pablo.Domain.Persistance.IBookshelfRepository;
 import ru.pablo.PersistanceImpl.Mappers.BookshelfMapper;
-import ru.pablo.PersistanceImpl.Repositories.Tables.BookshelfTable;
-import ru.pablo.PersistanceImpl.Repositories.Tables.UsersBookshelvesTable;
+import ru.pablo.PersistanceImpl.Tables.BookshelfTable;
+import ru.pablo.PersistanceImpl.Tables.UsersBookshelvesTable;
 
 import java.util.List;
 

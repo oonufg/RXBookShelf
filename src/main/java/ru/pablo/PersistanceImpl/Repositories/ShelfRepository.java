@@ -3,7 +3,7 @@ package ru.pablo.PersistanceImpl.Repositories;
 import ru.pablo.Domain.Entities.Shelf;
 import ru.pablo.Domain.Persistance.IShelfRepository;
 import ru.pablo.PersistanceImpl.Mappers.ShelfMapper;
-import ru.pablo.PersistanceImpl.Repositories.Tables.ShelfTable;
+import ru.pablo.PersistanceImpl.Tables.ShelfTable;
 
 import java.util.List;
 
@@ -31,6 +31,11 @@ public class ShelfRepository implements IShelfRepository {
     @Override
     public void deleteShelf(long shelfId) {
         shelfTable.deleteShelf(shelfId);
+    }
+
+    @Override
+    public void changeShelf(Shelf shelfToChange) {
+        shelfTable.changeShelf(shelfToChange.getId(), shelfToChange.getTitle());
     }
 
 

@@ -8,21 +8,23 @@ public class Book {
     private String title;
     private String description;
     private long payloadId;
-    private MediaFileRepository mediaFileRepository;
+    private static MediaFileRepository mediaFileRepository;
+
+    static {
+        mediaFileRepository = new MediaFileRepository();
+    }
 
     public Book(long id, String title, String description, long payloadId){
         this.id = id;
         this.title = title;
         this.description = description;
         this.payloadId = payloadId;
-        this.mediaFileRepository = new MediaFileRepository();
     }
 
     public Book(String title, String description, MediaFile mediaFile){
         this.title = title;
         this.description = description;
-        this.mediaFileRepository = new MediaFileRepository();
-        this.payloadId = this.mediaFileRepository.addMediaFile(mediaFile);
+        this.payloadId = mediaFileRepository.addMediaFile(mediaFile);
     }
 
     public long getId() {

@@ -11,4 +11,8 @@ public interface IShelfRepository {
 
     void deleteShelf(long shelfId);
 
+    void changeShelf(Shelf shelfToChange);
+
 }
+
+

@@ -1,10 +1,9 @@
 package ru.pablo.PersistanceImpl.Repositories;
 
 import ru.pablo.Domain.Entities.Book;
-import ru.pablo.Domain.Entities.Shelf;
 import ru.pablo.Domain.Persistance.IBookRepository;
 import ru.pablo.PersistanceImpl.Mappers.BookMapper;
-import ru.pablo.PersistanceImpl.Repositories.Tables.BookTable;
+import ru.pablo.PersistanceImpl.Tables.BookTable;
 
 import java.util.List;
 
