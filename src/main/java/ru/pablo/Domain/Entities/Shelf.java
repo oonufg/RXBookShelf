@@ -28,6 +28,7 @@ public class Shelf {
     }
 
     public Book getBook(long bookId){
+
         return bookRepository.getBook(bookId);
     }
 

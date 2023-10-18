@@ -5,6 +5,7 @@ import ru.pablo.PersistanceImpl.Tables.Database.BookshelfServiceTable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,18 @@ public class BookTable extends BookshelfServiceTable {
         return result;
     }
 
+    public Map<String, Object> getBook(Long bookId){
+        Map<String, Object> result = new HashMap<>();
+        try{
+            PreparedStatement query = getBookStatement(bookId);
+            ResultSet queryResult = executeQuery(query);
+            result.putAll(resultSetToMap(queryResult));
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return  result;
+    }
+
     public void addBook(String title, String description, long shelf_id, long payload_id){
         try{
             PreparedStatement query = getAddBookStatement(title, description, shelf_id, payload_id);
@@ -30,6 +43,15 @@ public class BookTable extends BookshelfServiceTable {
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }
+    }
+
+    public PreparedStatement getBookStatement(long bookId) throws SQLException{
+        String query =
+                "SELECT id, title, description, payload_id FROM books " +
+                "WHERE id = ?";
+        PreparedStatement statement = getStatement(query);
+        statement.setLong(1, bookId);
+        return statement;
     }
 
     private PreparedStatement getAddBookStatement(String title, String description, long shelf_id, long payload_id) throws SQLException{

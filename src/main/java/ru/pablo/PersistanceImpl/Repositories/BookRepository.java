@@ -16,7 +16,7 @@ public class BookRepository implements IBookRepository {
 
     @Override
     public Book getBook(long bookId) {
-        return null;
+        return BookMapper.mapBook(bookTable.getBook(bookId));
     }
 
     @Override

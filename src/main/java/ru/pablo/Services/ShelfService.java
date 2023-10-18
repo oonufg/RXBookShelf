@@ -4,6 +4,7 @@ package ru.pablo.Services;
 import org.springframework.stereotype.Service;
 import ru.pablo.Domain.Entities.Book;
 import ru.pablo.Domain.Entities.Shelf;
+import ru.pablo.Domain.MediaService.Entities.MediaFile;
 import ru.pablo.PersistanceImpl.Repositories.ShelfRepository;
 import ru.pablo.Services.DTO.BookDTO;
 import ru.pablo.Services.DTO.ShelfDTO;
@@ -33,7 +34,10 @@ public class ShelfService {
         currentShelf.deleteBook(new Book(bookDTO.id(), bookDTO.tile(), bookDTO.description(), bookDTO.payloadId()));
     }
 
-
+    public MediaFile getBook(long shelfId, long bookId){
+        Shelf currentShelf = shelfRepository.getShelf(shelfId);
+        return currentShelf.getBook(bookId).getPayload();
+    }
 
     public ShelfDTO getShelf(long shelfId){
         Shelf shelf = shelfRepository.getShelf(shelfId);

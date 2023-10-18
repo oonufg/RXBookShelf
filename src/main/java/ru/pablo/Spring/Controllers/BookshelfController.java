@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
+
 import ru.pablo.Services.BookshelfService;
 import ru.pablo.Services.DTO.BookshelfDTO;
 import ru.pablo.Services.DTO.ShelfDTO;
@@ -20,56 +20,44 @@ public class BookshelfController {
     }
 
     @GetMapping("")
-    public Mono<ResponseEntity<?>> handleGetUserBookShelves(@RequestHeader("userID") long userId){
-        return Mono.just(
-                ResponseEntity
+    public ResponseEntity<?> handleGetUserBookShelves(@RequestHeader("userID") long userId){
+        return ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(bookshelfService.getBookshelves(userId))
-        );
+                .body(bookshelfService.getBookshelves(userId));
     }
 
     @PostMapping("")
-    public Mono<ResponseEntity<?>> handleCreateBookshelf(@RequestHeader("userID") long userId, @RequestBody BookshelfDTO bookshelfDTO){
+    public ResponseEntity<?> handleCreateBookshelf(@RequestHeader("userID") long userId, @RequestBody BookshelfDTO bookshelfDTO){
         bookshelfService.createBookshelf(userId, bookshelfDTO);
-        return Mono.just(
-                ResponseEntity
-                        .ok().body("")
-        );
+        return ResponseEntity
+                        .ok().body("");
     }
 
     @DeleteMapping("")
-    public Mono<ResponseEntity<?>> handleDeleteBookshelf(@RequestHeader("userId") long userId, @RequestBody BookshelfDTO bookshelfDTO){
+    public ResponseEntity<?> handleDeleteBookshelf(@RequestHeader("userId") long userId, @RequestBody BookshelfDTO bookshelfDTO){
         bookshelfService.deleteBookshelf(userId, bookshelfDTO.id());
-        return Mono.just(
-                ResponseEntity.ok("")
-        );
+        return ResponseEntity.ok("");
     }
 
     @GetMapping("/{bookshelfId}")
-    public Mono<ResponseEntity<?>> handleGetBookshelf(@RequestHeader("userId") long userId, @PathVariable("bookshelfId") long bookshelfId){
-        return Mono.just(
-                ResponseEntity
+    public ResponseEntity<?> handleGetBookshelf(@RequestHeader("userId") long userId, @PathVariable("bookshelfId") long bookshelfId){
+        return ResponseEntity
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(bookshelfService.getBookshelf(userId, bookshelfId))
-        );
+                        .body(bookshelfService.getBookshelf(userId, bookshelfId));
     }
 
     @PostMapping("/{bookshelfId}")
-    public Mono<ResponseEntity<?>> handleAddShelfToBookshelf(@RequestHeader("userId") long userId, @PathVariable("bookshelfId") long bookshelfId, @RequestBody ShelfDTO shelfDTO){
+    public ResponseEntity<?> handleAddShelfToBookshelf(@RequestHeader("userId") long userId, @PathVariable("bookshelfId") long bookshelfId, @RequestBody ShelfDTO shelfDTO){
         bookshelfService.addShelfToBookshelf(userId, bookshelfId, shelfDTO);
-        return Mono.just(
-                ResponseEntity.ok("")
-        );
+        return ResponseEntity.ok("");
     }
 
     @DeleteMapping("/{bookshelfId}")
-    public Mono<ResponseEntity<?>> handleDeleteShelfFromBookshelf(@RequestHeader("userId") long userId, @PathVariable("bookshelfId") long bookshelfId, @RequestBody ShelfDTO bookshelfDTO){
+    public ResponseEntity<?> handleDeleteShelfFromBookshelf(@RequestHeader("userId") long userId, @PathVariable("bookshelfId") long bookshelfId, @RequestBody ShelfDTO bookshelfDTO){
         bookshelfService.deleteShelfFromBookshelf(userId, new BookshelfDTO(bookshelfId, null, null), bookshelfDTO);
-        return Mono.just(
-                ResponseEntity.ok("")
-        );
+        return ResponseEntity.ok("");
     }
 
 
