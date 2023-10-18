@@ -3,6 +3,9 @@ package ru.pablo.Services;
 import org.springframework.stereotype.Service;
 import ru.pablo.Domain.Entities.Bookshelf;
 import ru.pablo.Domain.Entities.Shelf;
+import ru.pablo.Domain.Exceptions.Bookshelf.BookshelfAlreadyExistsException;
+import ru.pablo.Domain.Exceptions.Bookshelf.BookshelfNotExistException;
+import ru.pablo.Domain.Exceptions.User.UserNotHaveAccessException;
 import ru.pablo.PersistanceImpl.Repositories.BookshelfRepository;
 import ru.pablo.Services.DTO.BookshelfDTO;
 import ru.pablo.Services.DTO.ShelfDTO;
@@ -17,12 +20,12 @@ public class BookshelfService {
         bookshelfRepository = new BookshelfRepository();
     }
 
-    public void createBookshelf(long userId, BookshelfDTO bookshelfDTO){
+    public void createBookshelf(long userId, BookshelfDTO bookshelfDTO) throws BookshelfAlreadyExistsException {
         bookshelfRepository.appendBookshelf(userId, new Bookshelf(bookshelfDTO.title()));
     }
 
-    public void deleteBookshelf(long userId, long bookshelfId){
-        bookshelfRepository.deleteBookshelf(bookshelfId);
+    public void deleteBookshelf(long userId, long bookshelfId) throws UserNotHaveAccessException {
+        bookshelfRepository.deleteBookshelf(userId, bookshelfId);
     }
 
     public void changeBookshelf(long userId,long bookshelfId, String title){
@@ -37,7 +40,7 @@ public class BookshelfService {
         return result;
     }
 
-    public BookshelfDTO getBookshelf(long userId, long bookshelfId){
+    public BookshelfDTO getBookshelf(long userId, long bookshelfId) throws BookshelfNotExistException{
         Bookshelf bookshelf = bookshelfRepository.getBookshelf(bookshelfId);
         List<ShelfDTO> shelfDTOS = new LinkedList<>();
         for(Shelf shelf: bookshelf.getShelves()){
@@ -47,12 +50,12 @@ public class BookshelfService {
 
     }
 
-    public void addShelfToBookshelf(long userId, long bookshelfId, ShelfDTO shelfDTO){
+    public void addShelfToBookshelf(long userId, long bookshelfId, ShelfDTO shelfDTO) throws BookshelfNotExistException {
         Bookshelf currentBookshelf = bookshelfRepository.getBookshelf(bookshelfId);
         currentBookshelf.addShelf(new Shelf(shelfDTO.id(), shelfDTO.title()));
     }
 
-    public void deleteShelfFromBookshelf(long userId, BookshelfDTO bookshelfDTO, ShelfDTO shelfDTO){
+    public void deleteShelfFromBookshelf(long userId, BookshelfDTO bookshelfDTO, ShelfDTO shelfDTO) throws BookshelfNotExistException{
         Bookshelf bookshelf = bookshelfRepository.getBookshelf(bookshelfDTO.id());
         bookshelf.deleteShelf(shelfDTO.id());
     }

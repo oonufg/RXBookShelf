@@ -1,6 +1,9 @@
 package ru.pablo.PersistanceImpl.Repositories;
 
 import ru.pablo.Domain.Entities.Bookshelf;
+import ru.pablo.Domain.Exceptions.Bookshelf.BookshelfAlreadyExistsException;
+import ru.pablo.Domain.Exceptions.Bookshelf.BookshelfNotExistException;
+import ru.pablo.Domain.Exceptions.User.UserNotHaveAccessException;
 import ru.pablo.Domain.Persistance.IBookshelfRepository;
 import ru.pablo.PersistanceImpl.Mappers.BookshelfMapper;
 import ru.pablo.PersistanceImpl.Tables.BookshelfTable;
@@ -18,8 +21,12 @@ public class BookshelfRepository implements IBookshelfRepository {
     }
 
     @Override
-    public Bookshelf getBookshelf(long bookshelfID) {
-        return BookshelfMapper.mapBookshelf(bookshelfTable.getUserBookshelf(bookshelfID));
+    public Bookshelf getBookshelf(long bookshelfID) throws BookshelfNotExistException{
+        if(bookshelfTable.isBookshelfExists(bookshelfID)) {
+            return BookshelfMapper.mapBookshelf(bookshelfTable.getUserBookshelf(bookshelfID));
+        }else{
+            throw new BookshelfNotExistException();
+        }
     }
 
     @Override
@@ -28,13 +35,21 @@ public class BookshelfRepository implements IBookshelfRepository {
     }
 
     @Override
-    public void appendBookshelf(long userID, Bookshelf bookshelfToAdd) {
-        bookshelfTable.createBookshelf(userID, bookshelfToAdd.getTitle());
+    public void appendBookshelf(long userID, Bookshelf bookshelfToAdd) throws BookshelfAlreadyExistsException{
+        if(!bookshelfTable.isUserHaveSameBookshelf(userID, bookshelfToAdd.getTitle())) {
+            bookshelfTable.createBookshelf(userID, bookshelfToAdd.getTitle());
+        }else{
+            throw new BookshelfAlreadyExistsException();
+        }
     }
 
     @Override
-    public void deleteBookshelf(long bookshelfId) {
-        bookshelfTable.deleteBookshelf(bookshelfId);
+    public void deleteBookshelf(long userId, long bookshelfId) throws UserNotHaveAccessException{
+        if(bookshelfTable.isUserOwnerOfBookshelf(userId, bookshelfId)){
+            bookshelfTable.deleteBookshelf(bookshelfId);
+        }else{
+            throw new UserNotHaveAccessException();
+        }
     }
 
     @Override

@@ -75,6 +75,14 @@ public abstract class AbstractTable {
         return result;
     }
 
+    protected boolean isRowExist(ResultSet set) throws SQLException{
+        boolean result = false;
+        if(set.next()){
+            result = set.getBoolean(1);
+        }
+        return result;
+    }
+
     protected void setupConnection(String url, String username, String password){
         initJDBCDriver();
         initConnection(url,username,password);

@@ -65,6 +65,42 @@ public class BookshelfTable  extends BookshelfServiceTable {
         }
     }
 
+    public boolean isBookshelfExists(long bookshelfId){
+        boolean result = false;
+        try{
+            PreparedStatement query = getIsBookshelfExistsStatement(bookshelfId);
+            ResultSet queryResult = executeQuery(query);
+            result = isRowExist(queryResult);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
+
+    public boolean isUserOwnerOfBookshelf(long userId, long bookshelfId){
+        boolean result = false;
+        try{
+            PreparedStatement query = getIsUserBookshelfOwnerStatement(userId, bookshelfId);
+            ResultSet queryResult = executeQuery(query);
+            result = isRowExist(queryResult);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
+
+    public boolean isUserHaveSameBookshelf(long userId, String title){
+        boolean result = false;
+        try{
+            PreparedStatement query = getIsUserHaveSameBookshelfStatement(userId, title);
+            ResultSet queryResult = executeQuery(query);
+            result = isRowExist(queryResult);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
+
     private PreparedStatement getChangeBookshelfStatement(long bookshelfId, String title) throws SQLException{
         String query =
                 "UPDATE bookshelves " +
@@ -109,6 +145,29 @@ public class BookshelfTable  extends BookshelfServiceTable {
                         "WHERE bookshelves.owner_id = ?";
         PreparedStatement statement = getStatement(query);
         statement.setLong(1, userId);
+        return statement;
+    }
+
+    private PreparedStatement getIsBookshelfExistsStatement(long id) throws SQLException{
+        String query = "SELECT EXISTS (SELECT true from bookshelves where id = ?)";
+        PreparedStatement statement = getStatement(query);
+        statement.setLong(1, id);
+        return statement;
+    }
+
+    private PreparedStatement getIsUserBookshelfOwnerStatement(long userId, long bookshelfId) throws SQLException{
+        String query = "SELECT EXISTS (SELECT true FROM bookshelves WHERE id = ? AND owner_id = ?)";
+        PreparedStatement statement = getStatement(query);
+        statement.setLong(1, bookshelfId);
+        statement.setLong(2, userId);
+        return statement;
+    }
+
+    private PreparedStatement getIsUserHaveSameBookshelfStatement(long userid, String title) throws SQLException{
+        String query = "SELECT EXISTS (SELECT true FROM bookshelves WHERE title = ? AND owner_id = ?)";
+        PreparedStatement statement = getStatement(query);
+        statement.setString(1, title);
+        statement.setLong(2, userid);
         return statement;
     }
 
