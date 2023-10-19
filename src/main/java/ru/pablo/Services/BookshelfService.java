@@ -28,7 +28,7 @@ public class BookshelfService {
         bookshelfRepository.deleteBookshelf(userId, bookshelfId);
     }
 
-    public void changeBookshelf(long userId,long bookshelfId, String title){
+    public void changeBookshelf(long userId,long bookshelfId, String title) throws UserNotHaveAccessException{
         bookshelfRepository.changeBookshelf(userId, new Bookshelf(bookshelfId, title));
     }
 

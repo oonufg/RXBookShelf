@@ -31,11 +31,8 @@ public class ShelfController {
                         .body(shelfService.getShelf(shelfID));
     }
 
-    @GetMapping("/{shelfID}?{bookID}")
+    @GetMapping("/{shelfID}/{bookID}")
     public ResponseEntity<?> handleGetBookFromShelf(@RequestHeader("userID") long userId, @PathVariable("shelfID") Long shelfID, @PathVariable("bookID") Long bookID){
-        System.out.println(bookID);
-        System.out.println(shelfID);
-
         MediaFile mFile = shelfService.getBook(shelfID, bookID);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentDisposition(

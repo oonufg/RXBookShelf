@@ -63,6 +63,18 @@ public class ShelfTable extends BookshelfServiceTable {
         }
     }
 
+    public boolean isUserOwnerOfShelf(long userId, long shelfId){
+        boolean result = false;
+        try{
+            PreparedStatement query = getIsUserOwnerOfShelf(userId, shelfId);
+            ResultSet queryResult = executeQuery(query);
+            result = isRowExist(queryResult);
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
+
     private PreparedStatement getDeleteShelfPrepareStatement(long shelfId) throws SQLException{
         String query =
                 "DELETE FROM shelves " +
@@ -107,6 +119,17 @@ public class ShelfTable extends BookshelfServiceTable {
         statement.setString(1, title);
         statement.setLong(2, shelfId);
         return  statement;
+    }
+
+    private PreparedStatement getIsUserOwnerOfShelf(long userId, long shelfId) throws SQLException{
+        String query =
+                "SELECT EXISTS (SELECT true FROM shelves " +
+                "JOIN bookshelves ON shelves.bookshelf_id = bookshelves.id " +
+                "WHERE shelves.id = ? AND bookshelves.owner_id = ?)";
+        PreparedStatement statement = getStatement(query);
+        statement.setLong(1, shelfId);
+        statement.setLong(2, userId);
+        return statement;
     }
 
 }

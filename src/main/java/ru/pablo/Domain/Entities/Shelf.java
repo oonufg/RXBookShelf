@@ -6,11 +6,11 @@ import ru.pablo.PersistanceImpl.Repositories.BookRepository;
 import java.util.List;
 
 public class Shelf {
-    private long id;
+    private Long id;
     private String title;
     private IBookRepository bookRepository;
 
-    public Shelf(long id, String title){
+    public Shelf(Long id, String title){
         this.id = id;
         this.title = title;
         this.bookRepository = new BookRepository();

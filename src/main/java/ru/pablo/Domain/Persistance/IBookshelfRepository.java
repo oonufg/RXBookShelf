@@ -12,5 +12,5 @@ public interface IBookshelfRepository {
     List<Bookshelf> getBookshelves(long userId);
     void appendBookshelf(long userId, Bookshelf bookshelfToAdd) throws BookshelfAlreadyExistsException;
     void deleteBookshelf(long userId, long bookshelfId) throws UserNotHaveAccessException;
-    void changeBookshelf(long userID, Bookshelf bookshelfToChange);
+    void changeBookshelf(long userID, Bookshelf bookshelfToChange) throws UserNotHaveAccessException;
 }

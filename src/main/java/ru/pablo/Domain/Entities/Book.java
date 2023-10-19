@@ -4,7 +4,7 @@ import ru.pablo.Domain.MediaService.Entities.MediaFile;
 import ru.pablo.Domain.MediaService.Persistence.Repositories.MediaFileRepository;
 
 public class Book {
-    private long id;
+    private Long id;
     private String title;
     private String description;
     private long payloadId;

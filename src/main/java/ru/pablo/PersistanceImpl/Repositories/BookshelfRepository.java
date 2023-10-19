@@ -53,8 +53,12 @@ public class BookshelfRepository implements IBookshelfRepository {
     }
 
     @Override
-    public void changeBookshelf(long userID, Bookshelf bookshelfToChange) {
-        bookshelfTable.changeBookshelf(bookshelfToChange.getId(), bookshelfToChange.getTitle());
+    public void changeBookshelf(long userID, Bookshelf bookshelfToChange) throws UserNotHaveAccessException{
+        if (bookshelfTable.isUserOwnerOfBookshelf(userID, bookshelfToChange.getId())) {
+            bookshelfTable.changeBookshelf(bookshelfToChange.getId(), bookshelfToChange.getTitle());
+        }else{
+            throw new UserNotHaveAccessException();
+        }
     }
 
 }

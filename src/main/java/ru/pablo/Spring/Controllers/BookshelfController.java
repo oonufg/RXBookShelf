@@ -77,14 +77,12 @@ public class BookshelfController {
     }
 
     @DeleteMapping("/{bookshelfId}")
-    public ResponseEntity<?> handleDeleteShelfFromBookshelf(@RequestHeader("userId") long userId, @PathVariable("bookshelfId") long bookshelfId, @RequestBody ShelfDTO bookshelfDTO){
+    public ResponseEntity<?> handleDeleteShelfFromBookshelf(@RequestHeader("userId") long userId, @PathVariable("bookshelfId") long bookshelfId, @RequestBody ShelfDTO bookshelfDTO) {
         try {
             bookshelfService.deleteShelfFromBookshelf(userId, new BookshelfDTO(bookshelfId, null, null), bookshelfDTO);
             return ResponseEntity.ok("");
-        }catch (BookshelfNotExistException e){
+        } catch (BookshelfNotExistException e) {
             return ResponseEntity.notFound().build();
-                    }
+        }
     }
-
-
 }

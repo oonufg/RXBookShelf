@@ -14,7 +14,9 @@ public class BookshelfServiceTable extends PGTable {
     private String password;
 
     public BookshelfServiceTable(){
-        postsInit();
+        if(url != null) {
+            postsInit();
+        }
     }
     @PostConstruct
     private void  postsInit(){
