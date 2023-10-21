@@ -1,5 +1,6 @@
 package ru.pablo.Domain.Entities;
 
+import ru.pablo.Domain.Exceptions.User.UserNotHaveAccessException;
 import ru.pablo.PersistanceImpl.Repositories.ShelfRepository;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class Bookshelf {
         repository.appendShelf(id, shelf);
     }
 
-    public void deleteShelf(long shelfID){
+    public void deleteShelf(long shelfID)  {
         repository.deleteShelf(shelfID);
     }
 

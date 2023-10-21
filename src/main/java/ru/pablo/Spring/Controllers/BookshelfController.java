@@ -22,6 +22,17 @@ public class BookshelfController {
     public BookshelfController(BookshelfService service){
         this.bookshelfService = service;
     }
+    @PutMapping()
+    public ResponseEntity<?> handleUpdateBookshelf(@RequestHeader("userID") long userId, @RequestBody BookshelfDTO bookshelfDTO){
+        try {
+            bookshelfService.changeBookshelf(userId, bookshelfDTO);
+            return ResponseEntity.ok("");
+        }catch (BookshelfNotExistException e){
+            return ResponseEntity.notFound().build();
+        }catch(UserNotHaveAccessException e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
     @GetMapping()
     public ResponseEntity<?> handleGetUserBookShelves(@RequestHeader("userID") long userId){
@@ -39,7 +50,6 @@ public class BookshelfController {
         }catch (BookshelfAlreadyExistsException e){
             return ResponseEntity.badRequest().build();
         }
-
     }
 
     @DeleteMapping()
@@ -50,6 +60,8 @@ public class BookshelfController {
         }catch (UserNotHaveAccessException e){
             return ResponseEntity
                     .status(HttpStatusCode.valueOf(403)).build();
+        }catch (BookshelfNotExistException e){
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -70,19 +82,22 @@ public class BookshelfController {
         try {
             bookshelfService.addShelfToBookshelf(userId, bookshelfId, shelfDTO);
             return ResponseEntity.ok("");
-
-        }catch (BookshelfNotExistException e){
+        } catch (BookshelfNotExistException e){
             return ResponseEntity.notFound().build();
+        } catch (UserNotHaveAccessException e){
+            return ResponseEntity.badRequest().build();
         }
     }
 
     @DeleteMapping("/{bookshelfId}")
-    public ResponseEntity<?> handleDeleteShelfFromBookshelf(@RequestHeader("userId") long userId, @PathVariable("bookshelfId") long bookshelfId, @RequestBody ShelfDTO bookshelfDTO) {
+    public ResponseEntity<?> handleDeleteShelfFromBookshelf(@RequestHeader("userId") long userId, @PathVariable("bookshelfId") long bookshelfId, @RequestBody ShelfDTO shelfDTO) {
         try {
-            bookshelfService.deleteShelfFromBookshelf(userId, new BookshelfDTO(bookshelfId, null, null), bookshelfDTO);
+            bookshelfService.deleteShelfFromBookshelf(userId, new BookshelfDTO(bookshelfId, null, null), shelfDTO);
             return ResponseEntity.ok("");
         } catch (BookshelfNotExistException e) {
             return ResponseEntity.notFound().build();
+        } catch (UserNotHaveAccessException e){
+            return ResponseEntity.badRequest().build();
         }
     }
 }

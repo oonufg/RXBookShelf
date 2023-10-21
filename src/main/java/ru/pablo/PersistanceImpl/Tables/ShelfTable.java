@@ -11,6 +11,17 @@ import java.util.List;
 import java.util.Map;
 
 public class ShelfTable extends BookshelfServiceTable {
+    public boolean isShelfExists(long shelfId){
+        boolean result = false;
+        try{
+            PreparedStatement query = getIsShelfExistsStatement(shelfId);
+            ResultSet queryResult = executeQuery(query);
+            result = isRowExist(queryResult);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
 
     public void addShelf(long bookshelfId, String title){
         try{
@@ -32,6 +43,7 @@ public class ShelfTable extends BookshelfServiceTable {
         }
         return result;
     }
+
     public Map<String, Object> getShelf(long bookshelfId){
         Map<String, Object> result = new HashMap<>();
         try{
@@ -66,7 +78,7 @@ public class ShelfTable extends BookshelfServiceTable {
     public boolean isUserOwnerOfShelf(long userId, long shelfId){
         boolean result = false;
         try{
-            PreparedStatement query = getIsUserOwnerOfShelf(userId, shelfId);
+            PreparedStatement query = getIsUserOwnerOfShelfStatement(userId, shelfId);
             ResultSet queryResult = executeQuery(query);
             result = isRowExist(queryResult);
         }catch(SQLException e){
@@ -121,7 +133,7 @@ public class ShelfTable extends BookshelfServiceTable {
         return  statement;
     }
 
-    private PreparedStatement getIsUserOwnerOfShelf(long userId, long shelfId) throws SQLException{
+    private PreparedStatement getIsUserOwnerOfShelfStatement(long userId, long shelfId) throws SQLException{
         String query =
                 "SELECT EXISTS (SELECT true FROM shelves " +
                 "JOIN bookshelves ON shelves.bookshelf_id = bookshelves.id " +
@@ -132,4 +144,10 @@ public class ShelfTable extends BookshelfServiceTable {
         return statement;
     }
 
+    private PreparedStatement getIsShelfExistsStatement(long shelfId) throws SQLException{
+        String query = "SELECT EXISTS (SELECT true from shelves where id = ?)";
+        PreparedStatement statement = getStatement(query);
+        statement.setLong(1, shelfId);
+        return statement;
+    }
 }

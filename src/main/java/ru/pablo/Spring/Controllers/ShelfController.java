@@ -7,8 +7,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.pablo.Domain.Exceptions.Shelf.ShelfNotExistsException;
+import ru.pablo.Domain.Exceptions.User.UserNotHaveAccessException;
 import ru.pablo.Domain.MediaService.Entities.MediaFile;
 import ru.pablo.Services.DTO.BookDTO;
+import ru.pablo.Services.DTO.ShelfDTO;
 import ru.pablo.Services.ShelfService;
 
 import java.io.IOException;
@@ -51,10 +54,24 @@ public class ShelfController {
         try {
             MediaFile mFile = new MediaFile(file.getOriginalFilename(), file.getBytes());
             BookDTO bookDTO = new BookDTO(null, title, description, null, mFile);
-            shelfService.addBookToShelf(shelfID, bookDTO);
+            shelfService.addBookToShelf(userId, shelfID, bookDTO);
+            return ResponseEntity.ok().body("");
         }catch (IOException e){
             System.out.println(e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }catch (UserNotHaveAccessException e){
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok().body("");
+    }
+    @PutMapping()
+    public ResponseEntity<?> handleUpdateShelf(@RequestHeader("userID") long userId, @RequestBody ShelfDTO shelfDTO){
+        try {
+            shelfService.updateShelf(userId, shelfDTO);
+            return ResponseEntity.ok().build();
+        }catch (UserNotHaveAccessException e){
+            return ResponseEntity.badRequest().build();
+        }catch (ShelfNotExistsException e){
+            return ResponseEntity.notFound().build();
+        }
     }
 }

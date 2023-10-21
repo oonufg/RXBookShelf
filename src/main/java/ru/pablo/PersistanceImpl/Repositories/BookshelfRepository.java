@@ -44,21 +44,28 @@ public class BookshelfRepository implements IBookshelfRepository {
     }
 
     @Override
-    public void deleteBookshelf(long userId, long bookshelfId) throws UserNotHaveAccessException{
+    public void deleteBookshelf(long userId, long bookshelfId) throws UserNotHaveAccessException, BookshelfNotExistException{
         if(bookshelfTable.isUserOwnerOfBookshelf(userId, bookshelfId)){
-            bookshelfTable.deleteBookshelf(bookshelfId);
+            if(bookshelfTable.isBookshelfExists(bookshelfId)) {
+                bookshelfTable.deleteBookshelf(bookshelfId);
+            }else{
+                throw new BookshelfNotExistException();
+            }
         }else{
             throw new UserNotHaveAccessException();
         }
     }
 
     @Override
-    public void changeBookshelf(long userID, Bookshelf bookshelfToChange) throws UserNotHaveAccessException{
+    public void changeBookshelf(long userID, Bookshelf bookshelfToChange) throws UserNotHaveAccessException, BookshelfNotExistException{
         if (bookshelfTable.isUserOwnerOfBookshelf(userID, bookshelfToChange.getId())) {
-            bookshelfTable.changeBookshelf(bookshelfToChange.getId(), bookshelfToChange.getTitle());
+            if(bookshelfTable.isBookshelfExists(bookshelfToChange.getId())) {
+                bookshelfTable.changeBookshelf(bookshelfToChange.getId(), bookshelfToChange.getTitle());
+            }else{
+                throw new BookshelfNotExistException();
+            }
         }else{
             throw new UserNotHaveAccessException();
         }
     }
-
 }

@@ -4,7 +4,10 @@ package ru.pablo.Services;
 import org.springframework.stereotype.Service;
 import ru.pablo.Domain.Entities.Book;
 import ru.pablo.Domain.Entities.Shelf;
+import ru.pablo.Domain.Exceptions.Shelf.ShelfNotExistsException;
+import ru.pablo.Domain.Exceptions.User.UserNotHaveAccessException;
 import ru.pablo.Domain.MediaService.Entities.MediaFile;
+import ru.pablo.PersistanceImpl.DAO.ShelfDAO;
 import ru.pablo.PersistanceImpl.Repositories.ShelfRepository;
 import ru.pablo.Services.DTO.BookDTO;
 import ru.pablo.Services.DTO.ShelfDTO;
@@ -15,23 +18,33 @@ import java.util.List;
 @Service
 public class ShelfService {
     private static ShelfRepository shelfRepository;
+    private static ShelfDAO shelfDAO;
 
     static{
         shelfRepository = new ShelfRepository();
+        shelfDAO = new ShelfDAO();
     }
 
-    public void updateShelf(ShelfDTO shelfDTO){
-        shelfRepository.changeShelf(new Shelf(shelfDTO.id(), shelfDTO.title()));
+    public void updateShelf(long userID, ShelfDTO shelfDTO) throws UserNotHaveAccessException, ShelfNotExistsException {
+        shelfRepository.changeShelf(userID, new Shelf(shelfDTO.id(), shelfDTO.title()));
     }
 
-    public void addBookToShelf(long shelfId, BookDTO bookDTO){
-        Shelf currentShelf = shelfRepository.getShelf(shelfId);
-        currentShelf.addBook(new Book(bookDTO.tile(), bookDTO.description(), bookDTO.mediaFile()));
+    public void addBookToShelf(long userID, long shelfId, BookDTO bookDTO) throws UserNotHaveAccessException{
+        if(shelfDAO.isUserOwnerOfShelf(userID, shelfId)) {
+            Shelf currentShelf = shelfRepository.getShelf(shelfId);
+            currentShelf.addBook(new Book(bookDTO.tile(), bookDTO.description(), bookDTO.mediaFile()));
+        }else{
+            throw new UserNotHaveAccessException();
+        }
     }
 
-    public void deleteBookFromShelf(long shelfId, BookDTO bookDTO){
-        Shelf currentShelf = shelfRepository.getShelf(shelfId);
-        currentShelf.deleteBook(new Book(bookDTO.id(), bookDTO.tile(), bookDTO.description(), bookDTO.payloadId()));
+    public void deleteBookFromShelf(long userId, long shelfId, BookDTO bookDTO) throws UserNotHaveAccessException{
+        if(shelfDAO.isUserOwnerOfShelf(userId, shelfId)) {
+            Shelf currentShelf = shelfRepository.getShelf(shelfId);
+            currentShelf.deleteBook(new Book(bookDTO.id(), bookDTO.tile(), bookDTO.description(), bookDTO.payloadId()));
+        }else{
+            throw new UserNotHaveAccessException();
+        }
     }
 
     public MediaFile getBook(long shelfId, long bookId){

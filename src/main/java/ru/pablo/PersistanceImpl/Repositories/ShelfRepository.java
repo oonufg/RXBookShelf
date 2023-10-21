@@ -1,6 +1,8 @@
 package ru.pablo.PersistanceImpl.Repositories;
 
 import ru.pablo.Domain.Entities.Shelf;
+import ru.pablo.Domain.Exceptions.Shelf.ShelfNotExistsException;
+import ru.pablo.Domain.Exceptions.User.UserNotHaveAccessException;
 import ru.pablo.Domain.Persistance.IShelfRepository;
 import ru.pablo.PersistanceImpl.Mappers.ShelfMapper;
 import ru.pablo.PersistanceImpl.Tables.ShelfTable;
@@ -29,13 +31,21 @@ public class ShelfRepository implements IShelfRepository {
     }
 
     @Override
-    public void deleteShelf(long shelfId) {
+    public void deleteShelf(long shelfId){
         shelfTable.deleteShelf(shelfId);
     }
 
     @Override
-    public void changeShelf(Shelf shelfToChange) {
-        shelfTable.changeShelf(shelfToChange.getId(), shelfToChange.getTitle());
+    public void changeShelf(long userId, Shelf shelfToChange)  throws UserNotHaveAccessException, ShelfNotExistsException{
+        if(shelfTable.isShelfExists(shelfToChange.getId())) {
+            if (shelfTable.isUserOwnerOfShelf(userId, shelfToChange.getId())) {
+                shelfTable.changeShelf(shelfToChange.getId(), shelfToChange.getTitle());
+            } else {
+                throw new UserNotHaveAccessException();
+            }
+        }else{
+            throw new ShelfNotExistsException();
+        }
     }
 
 
