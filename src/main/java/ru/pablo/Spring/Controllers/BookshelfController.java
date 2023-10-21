@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import ru.pablo.Domain.Exceptions.Bookshelf.BookshelfAlreadyExistsException;
 import ru.pablo.Domain.Exceptions.Bookshelf.BookshelfNotExistException;
+import ru.pablo.Domain.Exceptions.Shelf.ShelfAlreadyExistException;
+import ru.pablo.Domain.Exceptions.Shelf.ShelfNotExistsException;
 import ru.pablo.Domain.Exceptions.User.UserNotHaveAccessException;
 import ru.pablo.Services.BookshelfService;
 import ru.pablo.Services.DTO.BookshelfDTO;
@@ -30,7 +32,8 @@ public class BookshelfController {
         }catch (BookshelfNotExistException e){
             return ResponseEntity.notFound().build();
         }catch(UserNotHaveAccessException e){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity
+                    .status(HttpStatusCode.valueOf(403)).build();
         }
     }
 
@@ -85,6 +88,9 @@ public class BookshelfController {
         } catch (BookshelfNotExistException e){
             return ResponseEntity.notFound().build();
         } catch (UserNotHaveAccessException e){
+            return ResponseEntity
+                    .status(HttpStatusCode.valueOf(403)).build();
+        } catch (ShelfAlreadyExistException e){
             return ResponseEntity.badRequest().build();
         }
     }
@@ -94,10 +100,11 @@ public class BookshelfController {
         try {
             bookshelfService.deleteShelfFromBookshelf(userId, new BookshelfDTO(bookshelfId, null, null), shelfDTO);
             return ResponseEntity.ok("");
-        } catch (BookshelfNotExistException e) {
+        } catch (BookshelfNotExistException | ShelfNotExistsException e) {
             return ResponseEntity.notFound().build();
         } catch (UserNotHaveAccessException e){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity
+                    .status(HttpStatusCode.valueOf(403)).build();
         }
     }
 }

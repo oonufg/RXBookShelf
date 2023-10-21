@@ -1,6 +1,7 @@
 package ru.pablo.PersistanceImpl.Repositories;
 
 import ru.pablo.Domain.Entities.Shelf;
+import ru.pablo.Domain.Exceptions.Shelf.ShelfAlreadyExistException;
 import ru.pablo.Domain.Exceptions.Shelf.ShelfNotExistsException;
 import ru.pablo.Domain.Exceptions.User.UserNotHaveAccessException;
 import ru.pablo.Domain.Persistance.IShelfRepository;
@@ -26,13 +27,21 @@ public class ShelfRepository implements IShelfRepository {
     }
 
     @Override
-    public void appendShelf(long bookshelfId, Shelf shelfToAdd) {
-        shelfTable.addShelf(bookshelfId, shelfToAdd.getTitle());
+    public void appendShelf(long bookshelfId, Shelf shelfToAdd) throws ShelfAlreadyExistException{
+        if(!shelfTable.isSameShelfExists(bookshelfId, shelfToAdd.getTitle())) {
+            shelfTable.addShelf(bookshelfId, shelfToAdd.getTitle());
+        }else{
+            throw new ShelfAlreadyExistException();
+        }
     }
 
     @Override
-    public void deleteShelf(long shelfId){
-        shelfTable.deleteShelf(shelfId);
+    public void deleteShelf(long shelfId) throws ShelfNotExistsException {
+        if(shelfTable.isShelfExists(shelfId)) {
+            shelfTable.deleteShelf(shelfId);
+        }else {
+            throw new ShelfNotExistsException();
+        }
     }
 
     @Override

@@ -12,6 +12,9 @@ public class ShelfDAO {
         return shelfTable.isUserOwnerOfShelf(userId, shelfId);
     }
 
+    public boolean isShelfExists(long shelfId){
+        return shelfTable.isShelfExists(shelfId);
+    }
 
 
 }

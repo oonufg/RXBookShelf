@@ -1,6 +1,7 @@
 package ru.pablo.Domain.Entities;
 
-import ru.pablo.Domain.Exceptions.User.UserNotHaveAccessException;
+import ru.pablo.Domain.Exceptions.Shelf.ShelfAlreadyExistException;
+import ru.pablo.Domain.Exceptions.Shelf.ShelfNotExistsException;
 import ru.pablo.PersistanceImpl.Repositories.ShelfRepository;
 
 import java.util.List;
@@ -32,11 +33,11 @@ public class Bookshelf {
         return repository.getShelves(id);
     }
 
-    public void addShelf(Shelf shelf){
+    public void addShelf(Shelf shelf) throws ShelfAlreadyExistException {
         repository.appendShelf(id, shelf);
     }
 
-    public void deleteShelf(long shelfID)  {
+    public void deleteShelf(long shelfID) throws ShelfNotExistsException {
         repository.deleteShelf(shelfID);
     }
 

@@ -1,10 +1,7 @@
 package ru.pablo.Spring.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.pablo.Domain.Exceptions.Shelf.ShelfNotExistsException;
@@ -60,7 +57,8 @@ public class ShelfController {
             System.out.println(e.getMessage());
             return ResponseEntity.badRequest().build();
         }catch (UserNotHaveAccessException e){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity
+                    .status(HttpStatusCode.valueOf(403)).build();
         }
     }
     @PutMapping()
@@ -69,7 +67,8 @@ public class ShelfController {
             shelfService.updateShelf(userId, shelfDTO);
             return ResponseEntity.ok().build();
         }catch (UserNotHaveAccessException e){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity
+                    .status(HttpStatusCode.valueOf(403)).build();
         }catch (ShelfNotExistsException e){
             return ResponseEntity.notFound().build();
         }

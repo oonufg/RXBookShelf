@@ -5,6 +5,8 @@ import ru.pablo.Domain.Entities.Bookshelf;
 import ru.pablo.Domain.Entities.Shelf;
 import ru.pablo.Domain.Exceptions.Bookshelf.BookshelfAlreadyExistsException;
 import ru.pablo.Domain.Exceptions.Bookshelf.BookshelfNotExistException;
+import ru.pablo.Domain.Exceptions.Shelf.ShelfAlreadyExistException;
+import ru.pablo.Domain.Exceptions.Shelf.ShelfNotExistsException;
 import ru.pablo.Domain.Exceptions.User.UserNotHaveAccessException;
 import ru.pablo.PersistanceImpl.DAO.BookshelfDAO;
 import ru.pablo.PersistanceImpl.Repositories.BookshelfRepository;
@@ -58,7 +60,7 @@ public class BookshelfService {
 
     }
 
-    public void addShelfToBookshelf(long userId, long bookshelfId, ShelfDTO shelfDTO) throws BookshelfNotExistException, UserNotHaveAccessException {
+    public void addShelfToBookshelf(long userId, long bookshelfId, ShelfDTO shelfDTO) throws BookshelfNotExistException, UserNotHaveAccessException, ShelfAlreadyExistException {
         if(bookshelfDAO.isUserOwnerOfBookshelf(userId, bookshelfId)) {
             Bookshelf currentBookshelf = bookshelfRepository.getBookshelf(bookshelfId);
             currentBookshelf.addShelf(new Shelf(shelfDTO.id(), shelfDTO.title()));
@@ -67,7 +69,7 @@ public class BookshelfService {
         }
     }
 
-    public void deleteShelfFromBookshelf(long userId, BookshelfDTO bookshelfDTO, ShelfDTO shelfDTO) throws BookshelfNotExistException, UserNotHaveAccessException {
+    public void deleteShelfFromBookshelf(long userId, BookshelfDTO bookshelfDTO, ShelfDTO shelfDTO) throws BookshelfNotExistException, UserNotHaveAccessException, ShelfNotExistsException {
         if (bookshelfDAO.isUserOwnerOfBookshelf(userId, bookshelfDTO.id())) {
             Bookshelf bookshelf = bookshelfRepository.getBookshelf(bookshelfDTO.id());
             bookshelf.deleteShelf(shelfDTO.id());

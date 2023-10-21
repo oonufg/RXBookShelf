@@ -23,6 +23,18 @@ public class ShelfTable extends BookshelfServiceTable {
         return result;
     }
 
+    public boolean isSameShelfExists(long bookshelfId, String shelfTitle){
+        boolean result = false;
+        try{
+            PreparedStatement query = getIsSameShelfExists(bookshelfId, shelfTitle);
+            ResultSet queryResult = executeQuery(query);
+            result = isRowExist(queryResult);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
+
     public void addShelf(long bookshelfId, String title){
         try{
             PreparedStatement query = getAddShelfStatement(bookshelfId, title);
@@ -150,4 +162,16 @@ public class ShelfTable extends BookshelfServiceTable {
         statement.setLong(1, shelfId);
         return statement;
     }
+
+    private PreparedStatement getIsSameShelfExists(long bookshelfId, String title) throws SQLException{
+        String query =
+                "SELECT EXISTS (SELECT true FROM shelves " +
+                "JOIN bookshelves ON shelves.bookshelf_id = bookshelves.id " +
+                "WHERE shelves.title = ? AND bookshelves.id = ?)";
+        PreparedStatement statement = getStatement(query);
+        statement.setString(1, title);
+        statement.setLong(2, bookshelfId);
+        return statement;
+    }
+
 }
