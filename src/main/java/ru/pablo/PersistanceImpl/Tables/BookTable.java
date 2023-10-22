@@ -45,7 +45,40 @@ public class BookTable extends BookshelfServiceTable {
         }
     }
 
-    public PreparedStatement getBookStatement(long bookId) throws SQLException{
+    public void deleteBook(long shelfId, long bookId){
+        try{
+            PreparedStatement statement = getDeleteBookStatement(shelfId, bookId);
+            executeUpdate(statement);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public boolean isSameBookAlreadyExistsOnShelf(long shelfId, String bookTitle){
+        boolean result = false;
+        try {
+            PreparedStatement query = getIsSameBookAlreadyOnShelfStatement(shelfId, bookTitle);
+            ResultSet queryResult = executeQuery(query);
+            result = isRowExist(queryResult);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
+
+    public boolean isBookExists(long bookId){
+        boolean result = false;
+        try {
+            PreparedStatement query = getIsBookExistsStatement(bookId);
+            ResultSet queryResult = executeQuery(query);
+            result = isRowExist(queryResult);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
+
+    private PreparedStatement getBookStatement(long bookId) throws SQLException{
         String query =
                 "SELECT id, title, description, payload_id FROM books " +
                 "WHERE id = ?";
@@ -72,6 +105,31 @@ public class BookTable extends BookshelfServiceTable {
                 "WHERE books.shelf_id = ?";
         PreparedStatement statement = getStatement(query);
         statement.setLong(1, shelfId);
+        return statement;
+    }
+
+    private PreparedStatement getIsSameBookAlreadyOnShelfStatement(long shelfId, String title) throws SQLException{
+        String query = "SELECT EXISTS (SELECT true FROM books WHERE title = ? AND shelf_id = ?)";
+        PreparedStatement statement = getStatement(query);
+        statement.setString(1, title);
+        statement.setLong(2, shelfId);
+        return statement;
+    }
+
+    private PreparedStatement getIsBookExistsStatement(long bookId) throws SQLException{
+        String query = "SELECT EXISTS (SELECT true FROM books WHERE id = ?)";
+        PreparedStatement statement = getStatement(query);
+        statement.setLong(1, bookId);
+        return statement;
+    }
+
+    private PreparedStatement getDeleteBookStatement(long shelfId, long bookId) throws SQLException{
+        String query =
+                "DELETE FROM books " +
+                "WHERE book_id = ? AND shelf_id = ?";
+        PreparedStatement statement = getStatement(query);
+        statement.setLong(1, bookId);
+        statement.setLong(2, shelfId);
         return statement;
     }
 

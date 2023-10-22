@@ -22,8 +22,12 @@ public class ShelfRepository implements IShelfRepository {
     }
 
     @Override
-    public Shelf getShelf(long shelfId) {
-        return ShelfMapper.mapShelf(shelfTable.getShelf(shelfId));
+    public Shelf getShelf(long shelfId) throws ShelfNotExistsException {
+        if(shelfTable.isShelfExists(shelfId)) {
+            return ShelfMapper.mapShelf(shelfTable.getShelf(shelfId));
+        }else{
+            throw new ShelfNotExistsException();
+        }
     }
 
     @Override
@@ -56,6 +60,4 @@ public class ShelfRepository implements IShelfRepository {
             throw new ShelfNotExistsException();
         }
     }
-
-
 }

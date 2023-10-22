@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface IShelfRepository {
     List<Shelf> getShelves(long bookshelfId);
-    Shelf getShelf(long shelfId);
+    Shelf getShelf(long shelfId) throws ShelfNotExistsException;
     void appendShelf(long bookshelfId, Shelf shelfToAdd) throws ShelfAlreadyExistException;
 
     void deleteShelf(long shelfId) throws ShelfNotExistsException;

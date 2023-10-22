@@ -4,6 +4,8 @@ package ru.pablo.Services;
 import org.springframework.stereotype.Service;
 import ru.pablo.Domain.Entities.Book;
 import ru.pablo.Domain.Entities.Shelf;
+import ru.pablo.Domain.Exceptions.Book.BookAlreadyOnShelfException;
+import ru.pablo.Domain.Exceptions.Book.BookNotExistException;
 import ru.pablo.Domain.Exceptions.Shelf.ShelfNotExistsException;
 import ru.pablo.Domain.Exceptions.User.UserNotHaveAccessException;
 import ru.pablo.Domain.MediaService.Entities.MediaFile;
@@ -29,7 +31,7 @@ public class ShelfService {
         shelfRepository.changeShelf(userID, new Shelf(shelfDTO.id(), shelfDTO.title()));
     }
 
-    public void addBookToShelf(long userID, long shelfId, BookDTO bookDTO) throws UserNotHaveAccessException{
+    public void addBookToShelf(long userID, long shelfId, BookDTO bookDTO) throws UserNotHaveAccessException, BookAlreadyOnShelfException, ShelfNotExistsException {
         if(shelfDAO.isUserOwnerOfShelf(userID, shelfId)) {
             Shelf currentShelf = shelfRepository.getShelf(shelfId);
             currentShelf.addBook(new Book(bookDTO.tile(), bookDTO.description(), bookDTO.mediaFile()));
@@ -38,7 +40,7 @@ public class ShelfService {
         }
     }
 
-    public void deleteBookFromShelf(long userId, long shelfId, BookDTO bookDTO) throws UserNotHaveAccessException{
+    public void deleteBookFromShelf(long userId, long shelfId, BookDTO bookDTO) throws UserNotHaveAccessException, BookNotExistException, ShelfNotExistsException{
         if(shelfDAO.isUserOwnerOfShelf(userId, shelfId)) {
             Shelf currentShelf = shelfRepository.getShelf(shelfId);
             currentShelf.deleteBook(new Book(bookDTO.id(), bookDTO.tile(), bookDTO.description(), bookDTO.payloadId()));
@@ -47,12 +49,12 @@ public class ShelfService {
         }
     }
 
-    public MediaFile getBook(long shelfId, long bookId){
+    public MediaFile getBookPayload(long shelfId, long bookId) throws BookNotExistException, ShelfNotExistsException {
         Shelf currentShelf = shelfRepository.getShelf(shelfId);
         return currentShelf.getBook(bookId).getPayload();
     }
 
-    public ShelfDTO getShelf(long shelfId){
+    public ShelfDTO getShelf(long shelfId) throws ShelfNotExistsException{
         Shelf shelf = shelfRepository.getShelf(shelfId);
         List<BookDTO> booksDTO = new LinkedList<>();
         for(Book currentBook: shelf.getBooks()){

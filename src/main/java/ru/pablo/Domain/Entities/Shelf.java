@@ -1,5 +1,7 @@
 package ru.pablo.Domain.Entities;
 
+import ru.pablo.Domain.Exceptions.Book.BookAlreadyOnShelfException;
+import ru.pablo.Domain.Exceptions.Book.BookNotExistException;
 import ru.pablo.Domain.Persistance.IBookRepository;
 import ru.pablo.PersistanceImpl.Repositories.BookRepository;
 
@@ -27,7 +29,7 @@ public class Shelf {
         return title;
     }
 
-    public Book getBook(long bookId){
+    public Book getBook(long bookId) throws BookNotExistException {
 
         return bookRepository.getBook(bookId);
     }
@@ -36,11 +38,11 @@ public class Shelf {
         return bookRepository.getBooks(id);
     }
 
-    public void addBook(Book bookToAdd){
+    public void addBook(Book bookToAdd) throws BookAlreadyOnShelfException {
         bookRepository.addBook(id, bookToAdd);
     }
 
-    public void deleteBook(Book book){
+    public void deleteBook(Book book) throws BookNotExistException{
         bookRepository.deleteBook(id, book);
     }
 }

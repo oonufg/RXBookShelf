@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.pablo.Domain.Exceptions.Book.BookAlreadyOnShelfException;
+import ru.pablo.Domain.Exceptions.Book.BookNotExistException;
 import ru.pablo.Domain.Exceptions.Shelf.ShelfNotExistsException;
 import ru.pablo.Domain.Exceptions.User.UserNotHaveAccessException;
 import ru.pablo.Domain.MediaService.Entities.MediaFile;
@@ -25,25 +27,35 @@ public class ShelfController {
 
     @GetMapping("/{shelfID}")
     public ResponseEntity<?> handleGetShelfBooks(@RequestHeader("userID") long userId, @PathVariable("shelfID") long shelfID){
-        return ResponseEntity
-                        .ok()
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(shelfService.getShelf(shelfID));
+        try {
+            return ResponseEntity
+                    .ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(shelfService.getShelf(shelfID));
+        }catch(ShelfNotExistsException e){
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/{shelfID}/{bookID}")
     public ResponseEntity<?> handleGetBookFromShelf(@RequestHeader("userID") long userId, @PathVariable("shelfID") Long shelfID, @PathVariable("bookID") Long bookID){
-        MediaFile mFile = shelfService.getBook(shelfID, bookID);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentDisposition(
-                ContentDisposition.attachment()
-                        .filename(mFile.getFullName())
-                        .build()
-        );
-        return ResponseEntity.ok().
-                contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .headers(httpHeaders)
-                .body(mFile.getPayload());
+        try {
+            MediaFile mFile = shelfService.getBookPayload(shelfID, bookID);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentDisposition(
+                    ContentDisposition.attachment()
+                            .filename(mFile.getFullName())
+                            .build()
+            );
+            return ResponseEntity.ok().
+                    contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .headers(httpHeaders)
+                    .body(mFile.getPayload());
+        }catch (BookNotExistException e){
+            return ResponseEntity.notFound().build();
+        }catch(ShelfNotExistsException e){
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping("/{shelfID}")
@@ -59,8 +71,28 @@ public class ShelfController {
         }catch (UserNotHaveAccessException e){
             return ResponseEntity
                     .status(HttpStatusCode.valueOf(403)).build();
+        }catch (BookAlreadyOnShelfException e){
+            return ResponseEntity.badRequest().build();
+        }catch(ShelfNotExistsException e){
+            return ResponseEntity.notFound().build();
         }
     }
+
+    @DeleteMapping("/{shelfId}")
+    public ResponseEntity<?> handleDeleteBookFromShelf(@RequestParam("userId") long userId, @PathVariable("shelfID") Long shelfID, @RequestBody BookDTO bookDTO){
+        try {
+            shelfService.deleteBookFromShelf(userId, shelfID, bookDTO);
+            return ResponseEntity.ok().build();
+        }catch (BookNotExistException e){
+            return ResponseEntity.notFound().build();
+        }catch (UserNotHaveAccessException e){
+            return ResponseEntity
+                    .status(HttpStatusCode.valueOf(403)).build();
+        }catch(ShelfNotExistsException e){
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PutMapping()
     public ResponseEntity<?> handleUpdateShelf(@RequestHeader("userID") long userId, @RequestBody ShelfDTO shelfDTO){
         try {
