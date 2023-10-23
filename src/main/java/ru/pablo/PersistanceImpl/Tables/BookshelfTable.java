@@ -105,8 +105,7 @@ public class BookshelfTable  extends BookshelfServiceTable {
         String query =
                 "UPDATE bookshelves " +
                 "SET title = ? " +
-                "WHERE id = ?"
-                ;
+                "WHERE id = ?";
         PreparedStatement statement = getStatement(query);
         statement.setString(1, title);
         statement.setLong(2, bookshelfId);
@@ -142,7 +141,7 @@ public class BookshelfTable  extends BookshelfServiceTable {
     private PreparedStatement getUserBookShevlesStatement(long userId) throws SQLException {
         String query =
                 "SELECT bookshelves.id, bookshelves.title FROM bookshelves " +
-                        "WHERE bookshelves.owner_id = ?";
+                "WHERE bookshelves.owner_id = ?";
         PreparedStatement statement = getStatement(query);
         statement.setLong(1, userId);
         return statement;

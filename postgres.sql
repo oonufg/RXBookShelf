@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS bookshelves(
     UNIQUE(title, owner_id)
 );
 
-CREATE TABLE users_subsbookshelves(
+CREATE TABLE bookshelves_subscribes(
     user_id BIGINT REFERENCES users(id),
     bookshelf_id BIGINT REFERENCES bookshelves(id),
     UNIQUE(user_id, bookshelf_id)
@@ -39,6 +39,6 @@ CREATE TABLE IF NOT EXISTS books(
     id BIGSERIAL PRIMARY KEY,
     title VARCHAR(50) NOT NULL,
     description VARCHAR(100) NOT NULL,
-	shelf_id BIGINT REFERENCES shelves(id),
+	shelf_id BIGINT REFERENCES shelves(id) ON DELETE CASCADE,
     payload_id BIGINT REFERENCES mediafiles(id)
 );

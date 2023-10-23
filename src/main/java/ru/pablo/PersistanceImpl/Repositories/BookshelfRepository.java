@@ -7,17 +7,17 @@ import ru.pablo.Domain.Exceptions.User.UserNotHaveAccessException;
 import ru.pablo.Domain.Persistance.IBookshelfRepository;
 import ru.pablo.PersistanceImpl.Mappers.BookshelfMapper;
 import ru.pablo.PersistanceImpl.Tables.BookshelfTable;
-import ru.pablo.PersistanceImpl.Tables.UsersBookshelvesTable;
+import ru.pablo.PersistanceImpl.Tables.BookshelvesSubscribesTable;
 
 import java.util.List;
 
 public class BookshelfRepository implements IBookshelfRepository {
     private static BookshelfTable bookshelfTable;
-    private static UsersBookshelvesTable usersBookshelvesTable;
+    private static BookshelvesSubscribesTable usersBookshelvesTable;
 
     static {
         bookshelfTable = new BookshelfTable();
-        usersBookshelvesTable = new UsersBookshelvesTable();
+        usersBookshelvesTable = new BookshelvesSubscribesTable();
     }
 
     @Override
@@ -31,8 +31,10 @@ public class BookshelfRepository implements IBookshelfRepository {
 
     @Override
     public List<Bookshelf> getBookshelves(long userId) {
-        return BookshelfMapper.mapListUserBookshelf(bookshelfTable.getUserBookshelves(userId));
+        return BookshelfMapper.mapListBookshelf(bookshelfTable.getUserBookshelves(userId));
     }
+
+
 
     @Override
     public void appendBookshelf(long userID, Bookshelf bookshelfToAdd) throws BookshelfAlreadyExistsException{

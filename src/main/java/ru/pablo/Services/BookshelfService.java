@@ -4,12 +4,15 @@ import org.springframework.stereotype.Service;
 import ru.pablo.Domain.Entities.Bookshelf;
 import ru.pablo.Domain.Entities.Shelf;
 import ru.pablo.Domain.Exceptions.Bookshelf.BookshelfAlreadyExistsException;
+import ru.pablo.Domain.Exceptions.Bookshelf.BookshelfAlreadyInSubscribesException;
 import ru.pablo.Domain.Exceptions.Bookshelf.BookshelfNotExistException;
+import ru.pablo.Domain.Exceptions.Bookshelf.BookshelfNotInSubscribesException;
 import ru.pablo.Domain.Exceptions.Shelf.ShelfAlreadyExistException;
 import ru.pablo.Domain.Exceptions.Shelf.ShelfNotExistsException;
 import ru.pablo.Domain.Exceptions.User.UserNotHaveAccessException;
 import ru.pablo.PersistanceImpl.DAO.BookshelfDAO;
 import ru.pablo.PersistanceImpl.Repositories.BookshelfRepository;
+import ru.pablo.PersistanceImpl.Repositories.SubscribeBookshelfRepository;
 import ru.pablo.Services.DTO.BookshelfDTO;
 import ru.pablo.Services.DTO.ShelfDTO;
 
@@ -19,10 +22,12 @@ import java.util.List;
 @Service
 public class BookshelfService {
     private static BookshelfRepository bookshelfRepository;
+    private static SubscribeBookshelfRepository subscribeBookshelfRepository;
     private static BookshelfDAO bookshelfDAO;
 
     static {
         bookshelfRepository = new BookshelfRepository();
+        subscribeBookshelfRepository = new SubscribeBookshelfRepository();
         bookshelfDAO = new BookshelfDAO();
     }
 
@@ -77,4 +82,23 @@ public class BookshelfService {
             throw new UserNotHaveAccessException();
         }
     }
+
+    public List<BookshelfDTO> getSubscribeBookshelves(long userId){
+        List<BookshelfDTO> result = new LinkedList<>();
+        for (Bookshelf bookshelf : subscribeBookshelfRepository.getSubscribeBookshelves(userId)) {
+            result.add(new BookshelfDTO(bookshelf.getId(), bookshelf.getTitle(), null));
+        }
+        return result;
+    }
+
+
+    public void subscribeToBookshelf(long userId, BookshelfDTO bookshelfDTO) throws BookshelfAlreadyInSubscribesException, BookshelfNotExistException {
+        subscribeBookshelfRepository.addBookshelfToSubscribes(userId, new Bookshelf(bookshelfDTO.id(), bookshelfDTO.title()));
+    }
+
+
+    public void unsubscribeFromBookshelf(long userId, BookshelfDTO bookshelfDTO) throws BookshelfNotInSubscribesException, BookshelfNotExistException {
+        subscribeBookshelfRepository.deleteBookshelfFromSubscribes(userId, new Bookshelf(bookshelfDTO.id(), bookshelfDTO.title()));
+    }
+
 }

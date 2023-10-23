@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import ru.pablo.Domain.Exceptions.Bookshelf.BookshelfAlreadyExistsException;
+import ru.pablo.Domain.Exceptions.Bookshelf.BookshelfAlreadyInSubscribesException;
 import ru.pablo.Domain.Exceptions.Bookshelf.BookshelfNotExistException;
+import ru.pablo.Domain.Exceptions.Bookshelf.BookshelfNotInSubscribesException;
 import ru.pablo.Domain.Exceptions.Shelf.ShelfAlreadyExistException;
 import ru.pablo.Domain.Exceptions.Shelf.ShelfNotExistsException;
 import ru.pablo.Domain.Exceptions.User.UserNotHaveAccessException;
@@ -44,6 +46,7 @@ public class BookshelfController {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(bookshelfService.getBookshelves(userId));
     }
+
 
     @PostMapping()
     public ResponseEntity<?> handleCreateBookshelf(@RequestHeader("userID") long userId, @RequestBody BookshelfDTO bookshelfDTO){
@@ -107,4 +110,37 @@ public class BookshelfController {
                     .status(HttpStatusCode.valueOf(403)).build();
         }
     }
+
+    @GetMapping("/s")
+    public ResponseEntity<?> handleGetSubscribeanBookshelves(@RequestHeader("userID") long userId){
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(bookshelfService.getSubscribeBookshelves(userId));
+    }
+
+    @PostMapping("/s")
+    public ResponseEntity<?> handleSubscribeToBookshelf(@RequestHeader("userID") long userId, @RequestBody BookshelfDTO bookshelfDTO) {
+        try {
+            bookshelfService.subscribeToBookshelf(userId, bookshelfDTO);
+            return ResponseEntity.ok().build();
+        } catch (BookshelfAlreadyInSubscribesException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (BookshelfNotExistException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/s")
+    public ResponseEntity<?> handleUnsubscribeFromBookshelf(@RequestHeader("userID") long userId, @RequestBody BookshelfDTO bookshelfDTO) {
+        try {
+            bookshelfService.unsubscribeFromBookshelf(userId, bookshelfDTO);
+            return ResponseEntity.ok().build();
+        } catch (BookshelfNotInSubscribesException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (BookshelfNotExistException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
