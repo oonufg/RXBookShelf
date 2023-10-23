@@ -20,7 +20,7 @@ import ru.pablo.Services.DTO.ShelfDTO;
 @RestController
 @RequestMapping("/bookshelf")
 public class BookshelfController {
-    private BookshelfService bookshelfService;
+    private final BookshelfService bookshelfService;
 
     @Autowired
     public BookshelfController(BookshelfService service){

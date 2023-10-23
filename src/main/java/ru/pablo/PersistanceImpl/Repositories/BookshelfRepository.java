@@ -12,8 +12,8 @@ import ru.pablo.PersistanceImpl.Tables.BookshelvesSubscribesTable;
 import java.util.List;
 
 public class BookshelfRepository implements IBookshelfRepository {
-    private static BookshelfTable bookshelfTable;
-    private static BookshelvesSubscribesTable usersBookshelvesTable;
+    private static final BookshelfTable bookshelfTable;
+    private static final BookshelvesSubscribesTable usersBookshelvesTable;
 
     static {
         bookshelfTable = new BookshelfTable();

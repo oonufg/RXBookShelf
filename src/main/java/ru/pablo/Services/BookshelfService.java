@@ -21,9 +21,9 @@ import java.util.List;
 
 @Service
 public class BookshelfService {
-    private static BookshelfRepository bookshelfRepository;
-    private static SubscribeBookshelfRepository subscribeBookshelfRepository;
-    private static BookshelfDAO bookshelfDAO;
+    private static final BookshelfRepository bookshelfRepository;
+    private static final SubscribeBookshelfRepository subscribeBookshelfRepository;
+    private static final BookshelfDAO bookshelfDAO;
 
     static {
         bookshelfRepository = new BookshelfRepository();
