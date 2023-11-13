@@ -9,11 +9,19 @@ import java.util.List;
 public class Bookshelf {
     private Long id;
     private String title;
+    private String ownerNickname;
     private ShelfRepository repository;
 
     public Bookshelf(Long id, String title){
         this.id = id;
         this.title = title;
+        this.repository = new ShelfRepository();
+    }
+
+    public Bookshelf(Long id, String title, String ownerNickname){
+        this.id = id;
+        this.title = title;
+        this.ownerNickname = ownerNickname;
         this.repository = new ShelfRepository();
     }
 
@@ -27,6 +35,10 @@ public class Bookshelf {
 
     public long getId(){
         return id;
+    }
+
+    public String getOwnerNickname() {
+        return ownerNickname;
     }
 
     public List<Shelf> getShelves(){

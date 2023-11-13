@@ -1,22 +1,18 @@
 package ru.pablo.Domain.Entities;
 
 public class User {
-    private long id;
     private String nickname;
-    public User(long id, String nickname){
-        this.id = id;
-        this.nickname = nickname;
-    }
+    private String password;
 
-    public User(String nickname){
+    public User(String nickname, String password){
         this.nickname = nickname;
-    }
-
-    public long getId() {
-        return id;
+        this.password = password;
     }
 
     public String getNickname() {
         return nickname;
+    }
+    public String getPassword(){
+        return password;
     }
 }

@@ -10,7 +10,8 @@ public class BookshelfMapper {
     public static Bookshelf mapBookshelf(Map<String, Object> unmappedBookshelf){
         Bookshelf bookshelf = new Bookshelf(
                 (Long)unmappedBookshelf.get("id"),
-                (String)unmappedBookshelf.get("title")
+                (String)unmappedBookshelf.get("title"),
+                (String)unmappedBookshelf.get("nickname")
         );
         return bookshelf;
     }

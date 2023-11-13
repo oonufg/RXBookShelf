@@ -14,6 +14,8 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 
     implementation("org.springframework.boot:spring-boot-starter-web:3.1.4")
+    implementation("org.springframework.boot:spring-boot-starter-security:3.1.5")
+
 
     implementation("org.postgresql:postgresql:42.6.0")
 

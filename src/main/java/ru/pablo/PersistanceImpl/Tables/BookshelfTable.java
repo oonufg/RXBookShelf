@@ -15,7 +15,7 @@ public class BookshelfTable  extends BookshelfServiceTable {
     public List<Map<String,Object>> getUserBookshelves(long userId){
         List<Map<String,Object>> result = new LinkedList<>();
         try{
-            PreparedStatement query = getUserBookShevlesStatement(userId);
+            PreparedStatement query = getUserBookShelvesStatement(userId);
             ResultSet queryResult = executeQuery(query);
             result.addAll(resutlSetToList(queryResult));
         }catch(SQLException e){
@@ -131,17 +131,19 @@ public class BookshelfTable  extends BookshelfServiceTable {
 
     private PreparedStatement getUserBookshelfStatement(long bookShelfId) throws SQLException{
         String query =
-                "SELECT id, title FROM bookshelves " +
-                "WHERE id = ?";
+                "SELECT bookshelves.id, bookshelves.title, users.nickname FROM bookshelves " +
+                "JOIN users ON users.id = bookshelves.owner_id " +
+                "WHERE bookshelves.id = ?";
         PreparedStatement statement = getStatement(query);
         statement.setLong(1, bookShelfId);
         return statement;
     }
 
-    private PreparedStatement getUserBookShevlesStatement(long userId) throws SQLException {
+    private PreparedStatement getUserBookShelvesStatement(long userId) throws SQLException {
         String query =
-                "SELECT bookshelves.id, bookshelves.title FROM bookshelves " +
-                "WHERE bookshelves.owner_id = ?";
+                "SELECT bookshelves.id, bookshelves.title, users.nickname FROM bookshelves " +
+                "JOIN users ON users.id = bookshelves.owner_id " +
+                "WHERE users.id = ?";
         PreparedStatement statement = getStatement(query);
         statement.setLong(1, userId);
         return statement;

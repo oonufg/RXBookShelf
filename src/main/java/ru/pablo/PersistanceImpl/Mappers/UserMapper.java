@@ -9,8 +9,8 @@ import java.util.Map;
 public class UserMapper {
     public static User mapUser(Map<String, Object> unmappedUser){
         User user = new User(
-                (Long)unmappedUser.get("id"),
-                (String)unmappedUser.get("nickname")
+                (String)unmappedUser.get("nickname"),
+                (String)unmappedUser.get("password")
         );
         return user;
     }

@@ -50,7 +50,7 @@ public class BookshelfService {
     public List<BookshelfDTO> getBookshelves(long userId) {
         List<BookshelfDTO> result = new LinkedList<>();
         for (Bookshelf bookshelf : bookshelfRepository.getBookshelves(userId)) {
-            result.add(new BookshelfDTO(bookshelf.getId(), bookshelf.getTitle(), null));
+            result.add(new BookshelfDTO(bookshelf.getId(), bookshelf.getTitle(), bookshelf.getOwnerNickname() ,null));
         }
         return result;
     }
@@ -61,8 +61,16 @@ public class BookshelfService {
         for (Shelf shelf : bookshelf.getShelves()) {
             shelfDTOS.add(new ShelfDTO(shelf.getId(), shelf.getTitle(), null));
         }
-        return new BookshelfDTO(bookshelf.getId(), bookshelf.getTitle(), shelfDTOS);
+        return new BookshelfDTO(bookshelf.getId(), bookshelf.getTitle(), bookshelf.getOwnerNickname(), shelfDTOS);
+    }
 
+    public List<ShelfDTO> getShelves(long userId,Long bookshelfId) throws BookshelfNotExistException{
+        Bookshelf bookshelf = bookshelfRepository.getBookshelf(bookshelfId);
+        List<ShelfDTO> shelfDTOS = new LinkedList<>();
+        for (Shelf shelf : bookshelf.getShelves()) {
+            shelfDTOS.add(new ShelfDTO(shelf.getId(), shelf.getTitle(), null));
+        }
+        return shelfDTOS;
     }
 
     public void addShelfToBookshelf(long userId, long bookshelfId, ShelfDTO shelfDTO) throws BookshelfNotExistException, UserNotHaveAccessException, ShelfAlreadyExistException {
@@ -86,7 +94,7 @@ public class BookshelfService {
     public List<BookshelfDTO> getSubscribeBookshelves(long userId){
         List<BookshelfDTO> result = new LinkedList<>();
         for (Bookshelf bookshelf : subscribeBookshelfRepository.getSubscribeBookshelves(userId)) {
-            result.add(new BookshelfDTO(bookshelf.getId(), bookshelf.getTitle(), null));
+            result.add(new BookshelfDTO(bookshelf.getId(), bookshelf.getTitle(), bookshelf.getOwnerNickname(), null));
         }
         return result;
     }

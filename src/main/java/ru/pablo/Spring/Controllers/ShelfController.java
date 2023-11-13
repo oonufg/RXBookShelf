@@ -2,6 +2,7 @@ package ru.pablo.Spring.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.pablo.Domain.Exceptions.Book.BookAlreadyOnShelfException;
@@ -12,11 +13,12 @@ import ru.pablo.Domain.MediaService.Entities.MediaFile;
 import ru.pablo.Services.DTO.BookDTO;
 import ru.pablo.Services.DTO.ShelfDTO;
 import ru.pablo.Services.ShelfService;
+import ru.pablo.Spring.Security.ApplicationUser;
 
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/shelf")
+@RequestMapping("/api/v1//shelf")
 public class ShelfController {
     private ShelfService shelfService;
 
@@ -26,7 +28,7 @@ public class ShelfController {
     }
 
     @GetMapping("/{shelfID}")
-    public ResponseEntity<?> handleGetShelfBooks(@RequestHeader("userID") long userId, @PathVariable("shelfID") long shelfID){
+    public ResponseEntity<?> handleGetShelfBooks(@AuthenticationPrincipal ApplicationUser user, @PathVariable("shelfID") long shelfID){
         try {
             return ResponseEntity
                     .ok()
@@ -38,7 +40,7 @@ public class ShelfController {
     }
 
     @GetMapping("/{shelfID}/{bookID}")
-    public ResponseEntity<?> handleGetBookFromShelf(@RequestHeader("userID") long userId, @PathVariable("shelfID") Long shelfID, @PathVariable("bookID") Long bookID){
+    public ResponseEntity<?> handleGetBookFromShelf(@AuthenticationPrincipal ApplicationUser user, @PathVariable("shelfID") Long shelfID, @PathVariable("bookID") Long bookID){
         try {
             MediaFile mFile = shelfService.getBookPayload(shelfID, bookID);
             HttpHeaders httpHeaders = new HttpHeaders();
@@ -59,11 +61,11 @@ public class ShelfController {
     }
 
     @PostMapping("/{shelfID}")
-    public ResponseEntity<?> handleAddBookToShelf(@RequestHeader("userID") long userId, @PathVariable("shelfID") Long shelfID, @RequestParam("title") String title, @RequestParam("description") String description ,@RequestParam("file") MultipartFile file){
+    public ResponseEntity<?> handleAddBookToShelf(@AuthenticationPrincipal ApplicationUser user, @PathVariable("shelfID") Long shelfID, @RequestParam("title") String title, @RequestParam("description") String description ,@RequestParam("file") MultipartFile file){
         try {
             MediaFile mFile = new MediaFile(file.getOriginalFilename(), file.getBytes());
             BookDTO bookDTO = new BookDTO(null, title, description, null, mFile);
-            shelfService.addBookToShelf(userId, shelfID, bookDTO);
+            shelfService.addBookToShelf(user.getId(), shelfID, bookDTO);
             return ResponseEntity.ok().body("");
         }catch (IOException e){
             System.out.println(e.getMessage());
@@ -79,9 +81,9 @@ public class ShelfController {
     }
 
     @DeleteMapping("/{shelfId}")
-    public ResponseEntity<?> handleDeleteBookFromShelf(@RequestParam("userId") long userId, @PathVariable("shelfID") Long shelfID, @RequestBody BookDTO bookDTO){
+    public ResponseEntity<?> handleDeleteBookFromShelf(@AuthenticationPrincipal ApplicationUser user, @PathVariable("shelfID") Long shelfID, @RequestBody BookDTO bookDTO){
         try {
-            shelfService.deleteBookFromShelf(userId, shelfID, bookDTO);
+            shelfService.deleteBookFromShelf(user.getId(), shelfID, bookDTO);
             return ResponseEntity.ok().build();
         }catch (BookNotExistException e){
             return ResponseEntity.notFound().build();
@@ -94,9 +96,9 @@ public class ShelfController {
     }
 
     @PutMapping()
-    public ResponseEntity<?> handleUpdateShelf(@RequestHeader("userID") long userId, @RequestBody ShelfDTO shelfDTO){
+    public ResponseEntity<?> handleUpdateShelf(@AuthenticationPrincipal ApplicationUser user, @RequestBody ShelfDTO shelfDTO){
         try {
-            shelfService.updateShelf(userId, shelfDTO);
+            shelfService.updateShelf(user.getId(), shelfDTO);
             return ResponseEntity.ok().build();
         }catch (UserNotHaveAccessException e){
             return ResponseEntity
