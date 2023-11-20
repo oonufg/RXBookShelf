@@ -29,8 +29,8 @@ public class CUserDetailsService implements UserDetailsService {
     }
 
     public void save(User user){
-        if(!users.isUserExists(user.getNickname())){
-            users.addUser(user.getNickname(), passwordEncoder.encode(user.getPassword()));
+        if(!users.isUserExists(user.getUsername())){
+            users.addUser(user.getUsername(), passwordEncoder.encode(user.getPassword()));
         }
     }
 }

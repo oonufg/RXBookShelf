@@ -2,6 +2,7 @@ package ru.pablo.Spring.Security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -17,21 +18,25 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class SecurityConfig {
     @Bean
-    public SecurityFilterChain getSecurityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http
+            .csrf((csrf) -> csrf.disable())
             .authorizeHttpRequests((authorize) -> authorize
-                    .anyRequest().authenticated()
+                    .requestMatchers("/signup").permitAll()
+                    .anyRequest().hasRole("USER")
             )
             .formLogin(withDefaults());
         return http.build();
+
+
     }
 
     @Bean
-    public CUserDetailsService getUserDetailsService(){
+    public CUserDetailsService userDetailsService(){
         return new CUserDetailsService();
     }
     @Bean
-    public PasswordEncoder getPasswordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
