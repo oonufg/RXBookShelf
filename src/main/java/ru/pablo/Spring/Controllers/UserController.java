@@ -2,7 +2,7 @@ package ru.pablo.Spring.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.pablo.Domain.Entities.User;
+import ru.pablo.Spring.Security.ApplicationUser;
 import ru.pablo.Spring.Security.CUserDetailsService;
 
 @RestController
@@ -13,7 +13,7 @@ public class UserController {
     private CUserDetailsService userService;
 
     @PostMapping("/signup")
-    public void registration(@ModelAttribute User user){
+    public void registration(@ModelAttribute ApplicationUser user){
         userService.save(user);
     }
 

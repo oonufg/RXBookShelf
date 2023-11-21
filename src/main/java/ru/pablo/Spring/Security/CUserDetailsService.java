@@ -5,7 +5,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ru.pablo.Domain.Entities.User;
 import ru.pablo.PersistanceImpl.Tables.UserTable;
 
 import java.util.Map;
@@ -28,7 +27,7 @@ public class CUserDetailsService implements UserDetailsService {
         }
     }
 
-    public void save(User user){
+    public void save(ApplicationUser user){
         if(!users.isUserExists(user.getUsername())){
             users.addUser(user.getUsername(), passwordEncoder.encode(user.getPassword()));
         }
