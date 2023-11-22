@@ -21,3 +21,8 @@
 * Vanila JavaScript
 * HTML
 * CSS
+
+# GUI 
+![image](docs/Images/LibraryPage.png)
+
+![image](docs/Images/BookshelfPage.png)
