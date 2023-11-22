@@ -9,12 +9,12 @@ import java.util.List;
 
 public class ApplicationUser implements UserDetails {
     private Long id;
-    private String nickname;
+    private String username;
     private String password;
 
-    public ApplicationUser(Long id, String nickname, String password){
+    public ApplicationUser(Long id, String username, String password){
         this.id = id;
-        this.nickname = nickname;
+        this.username = username;
         this.password = password;
     }
 
@@ -30,7 +30,7 @@ public class ApplicationUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return nickname;
+        return username;
     }
     public Long getId(){
         return id;
