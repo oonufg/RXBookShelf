@@ -3,3 +3,11 @@ pgsql:
   username: postgres
   password: 177013
 
+spring:
+  session:
+    store-type: redis
+  data:
+    redis:
+      host: localhost
+      password: 177013
+      port: 6379
