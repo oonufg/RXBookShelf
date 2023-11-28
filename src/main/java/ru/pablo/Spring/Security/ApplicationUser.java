@@ -18,6 +18,11 @@ public class ApplicationUser implements UserDetails {
         this.password = password;
     }
 
+    public ApplicationUser(){
+
+    }
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("USER"));
