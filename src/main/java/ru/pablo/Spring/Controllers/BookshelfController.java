@@ -46,10 +46,11 @@ public class BookshelfController {
     @CrossOrigin
     @GetMapping()
     public ResponseEntity<?> handleGetUserBookShelves(@AuthenticationPrincipal ApplicationUser user){
+        Long userId = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(bookshelfService.getBookshelves(user.getId()));
+                .body(bookshelfService.getBookshelves(userId));
     }
 
 

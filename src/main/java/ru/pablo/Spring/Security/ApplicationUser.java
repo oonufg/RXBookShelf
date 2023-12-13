@@ -13,13 +13,12 @@ public class ApplicationUser implements UserDetails {
     private String username;
     private String password;
 
-    @ConstructorProperties({"id", "username", "password"})
+   @ConstructorProperties({"id", "username", "password"})
     public ApplicationUser(Long id, String username, String password){
         this.id = id;
         this.username = username;
         this.password = password;
     }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
