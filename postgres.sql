@@ -15,6 +15,12 @@ CREATE TABLE IF NOT EXISTS users(
     nickname VARCHAR(20) NOT NULL
 );
 
+CREATE TABLE refresh_tokens(
+	user_id BIGINT REFERENCES users(id),
+	token VARCHAR NOT NULL,
+	expiration TIMESTAMP NOT NULL
+)
+
 CREATE TABLE IF NOT EXISTS bookshelves(
     id BIGSERIAL PRIMARY KEY,
     title VARCHAR(20) NOT NULL,

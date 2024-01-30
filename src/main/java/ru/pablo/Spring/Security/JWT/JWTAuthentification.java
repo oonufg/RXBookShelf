@@ -3,20 +3,18 @@ package ru.pablo.Spring.Security.JWT;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import ru.pablo.Spring.Security.ApplicationUser;
 
 import java.util.Collection;
 import java.util.List;
 
 public class JWTAuthentification implements Authentication {
     private boolean isAuthentificated = false;
-    private String  id;
+    private ApplicationUser user;
 
     private List<SimpleGrantedAuthority> authorities;
-    public JWTAuthentification(String id, List<SimpleGrantedAuthority> authorities){
-        this.id = id;
-        this.authorities = authorities;
-
-
+    public JWTAuthentification(ApplicationUser user){
+        this.user = user;
     }
 
     @Override
@@ -36,7 +34,7 @@ public class JWTAuthentification implements Authentication {
 
     @Override
     public Object getPrincipal() {
-        return null;
+        return user;
     }
 
     @Override
@@ -51,6 +49,6 @@ public class JWTAuthentification implements Authentication {
 
     @Override
     public String getName() {
-        return this.id;
+        return user.getUsername();
     }
 }

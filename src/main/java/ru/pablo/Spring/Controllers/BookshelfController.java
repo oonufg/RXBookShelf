@@ -5,8 +5,6 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import ru.pablo.Domain.Exceptions.Bookshelf.BookshelfAlreadyExistsException;
@@ -43,14 +41,12 @@ public class BookshelfController {
         }
     }
 
-    @CrossOrigin
     @GetMapping()
     public ResponseEntity<?> handleGetUserBookShelves(@AuthenticationPrincipal ApplicationUser user){
-        Long userId = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(bookshelfService.getBookshelves(userId));
+                .body(bookshelfService.getBookshelves(user.getId()));
     }
 
 
@@ -64,7 +60,6 @@ public class BookshelfController {
         }
     }
 
-    @CrossOrigin
     @DeleteMapping()
     public ResponseEntity<?> handleDeleteBookshelf(@AuthenticationPrincipal ApplicationUser user, @RequestBody BookshelfDTO bookshelfDTO){
         try {

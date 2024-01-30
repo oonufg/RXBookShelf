@@ -3,11 +3,9 @@ pgsql:
   username: postgres
   password: 177013
 
-spring:
-  session:
-    store-type: redis
-  data:
-    redis:
-      host: localhost
-      password: 177013
-      port: 6379
+jwt:
+  secret: 7nFXppcVmvNxL6YJsbFmSPLDodpXu99ymCTBDHFhs6t33gzkXUwJkoI2WhpEzyO7
+  access:
+    lifetime: 6000000
+  refresh:
+    lifetime: 2592000

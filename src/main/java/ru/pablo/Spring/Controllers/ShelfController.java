@@ -18,7 +18,7 @@ import ru.pablo.Spring.Security.ApplicationUser;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api/v1//shelf")
+@RequestMapping("/api/v1/shelf")
 public class ShelfController {
     private ShelfService shelfService;
 
